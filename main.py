@@ -79,7 +79,8 @@ async def stats(ctx):
     top_5_most_games = list(guilds.aggregate(most_games_query))
 
     for i, result in enumerate(top_5_most_games, 1):
-        guild_name = result["_id"]["guild_name"]
+        guild_id = result["_id"]["guild_id"]
+        guild_name = bot.get_guild(guild_id).name
         total_games = result["total_games"]
         print(f"{i}. {guild_name}: {total_games} games")
 
