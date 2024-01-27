@@ -159,7 +159,7 @@ async def on_message(message):
                     await challenge.edit(embed=embed)
                     delete_captcha(random_string)
                     del captchas[message.channel.id] 
-                    await save_game(message.guild.id, captcha_length, characters_and_numbers, captchas[message.channel.id]['score'])           
+                    await save_game(message.guild.id, captchas[message.channel.id]['captcha_length'], captchas[message.channel.id]['characters_and_numbers'], captchas[message.channel.id]['score'])
             else:
                 score = captchas[message.channel.id]['score']
                 progress = "🔥" * (int(score/5)+1)
@@ -172,7 +172,7 @@ async def on_message(message):
                 await message.channel.send(embed=embed)
                 delete_captcha(answer)
                 del captchas[message.channel.id]
-                await save_game(message.guild.id, captcha_length, characters_and_numbers, captchas[message.channel.id]['score'])
+                await save_game(message.guild.id, captchas[message.channel.id]['captcha_length'], captchas[message.channel.id]['characters_and_numbers'], captchas[message.channel.id]['score'])
                 
     await bot.process_commands(message)
     
