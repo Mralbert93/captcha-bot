@@ -76,7 +76,7 @@ async def stats(ctx):
         {"$sort": {"total_games": -1}},
         {"$limit": 5}
     ]
-    top_5_most_games = list(guilds_collection.aggregate(most_games_query))
+    top_5_most_games = list(guilds.aggregate(most_games_query))
 
     for i, result in enumerate(top_5_most_games, 1):
         guild_name = result["_id"]["guild_name"]
