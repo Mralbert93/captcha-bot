@@ -1,18 +1,41 @@
 import asyncio
 from captchas import generate_captcha, delete_captcha
+import datetime
 import discord
 from discord.ext import commands
 import os
+from pymongo.mongo_client import MongoClient
+from pymongo.results import InsertOneResult, UpdateResult
 from timer import get_countdown
 
-captchas = {}
-
 token= os.environ.get("DISCORD_TOKEN")
+database_url = os.environ.get("DATABASE_URL")
+
+mongo = MongoClient(database_url)
+
+db = mongo.captcha
+guilds = db["guilds"]
+
+captchas = {}
 
 intents = discord.Intents.default()
 intents.message_content = True
 
 bot = commands.Bot(command_prefix=';', intents=intents)
+
+async def save_game(guild_id, captcha_length, characters_and_numbers, score):
+    game_result = {
+        'datetime': datetime.now(),
+        'captcha_length': captcha_length,
+        'characters_and_numbers': characters_and_numbers,
+        'score': 0
+    }
+    guild = guilds.find_one({'_id': guild_id})
+    if guild is None:
+         guilds.insert_one({'_id': guild_id, 'game_results': [game_result]})
+    else:
+        guilds.update_one({'_id': guild_id}, {'$push': {'game_results': game_result}}, upsert=True)
+    return
 
 @bot.event
 async def on_ready():
@@ -56,7 +79,7 @@ async def play(ctx, captcha_length: str = "6", characters_and_numbers: str = "Fa
     
     random_string = generate_captcha(captcha_length, characters_and_numbers)
     
-    file = discord.File(f"./captchas/{random_string}.png", filename=f"{random_string}.png")
+    file = discord.File(f"/usr/bot/captcha-bot/captchas/{random_string}.png", filename=f"{random_string}.png")
     
     embed = discord.Embed(
         title='Solve the Captcha below',
@@ -81,6 +104,8 @@ async def play(ctx, captcha_length: str = "6", characters_and_numbers: str = "Fa
         await challenge.edit(embed=embed)
         delete_captcha(random_string)
         del captchas[ctx.channel.id]
+
+        await save_game(ctx.guild.id, captcha_length, characters_and_numbers, 0)
     else:
         return
 
@@ -109,7 +134,7 @@ async def on_message(message):
                 characters_and_numbers = captchas[message.channel.id]['characters_and_numbers']
                 random_string = generate_captcha(captcha_length, characters_and_numbers)
                 
-                file = discord.File(f"./captchas/{random_string}.png", filename=f"{random_string}.png")
+                file = discord.File(f"/usr/bot/captcha-bot/captchas/{random_string}.png", filename=f"{random_string}.png")
                 
                 score = captchas[message.channel.id]['score']
                 progress = "🔥" * (int(score/5)+1)
@@ -133,7 +158,8 @@ async def on_message(message):
                     embed.description = f"You have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[message.channel.id]['score']}\n{progress}\n\nPlay again with `;p` or `;play`"
                     await challenge.edit(embed=embed)
                     delete_captcha(random_string)
-                    del captchas[message.channel.id]            
+                    del captchas[message.channel.id] 
+                    await save_game(message.guild.id, captcha_length, characters_and_numbers, captchas[message.channel.id]['score'])           
             else:
                 score = captchas[message.channel.id]['score']
                 progress = "🔥" * (int(score/5)+1)
@@ -143,9 +169,10 @@ async def on_message(message):
                     title="Wrong Answer",
                     description=f"You have lost.\nThe correct answer was **{answer}**.\n\n**Final Score:** {captchas[message.channel.id]['score']}\n{progress}\n\nPlay again with `;p` or `;play`",
                 )
+                await message.channel.send(embed=embed)
                 delete_captcha(answer)
                 del captchas[message.channel.id]
-                await message.channel.send(embed=embed)
+                await save_game(message.guild.id, captcha_length, characters_and_numbers, captchas[message.channel.id]['score'])
                 
     await bot.process_commands(message)
     
