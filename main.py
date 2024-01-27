@@ -56,7 +56,7 @@ bot.help_command = CustomHelpCommand()
 
 @bot.command(name='stats')
 async def stats(ctx):
-    query = [
+    main_query = [
         {'$match': {'_id': ctx.guild.id}},
         {'$unwind': '$game_results'},
         {'$group': {
@@ -68,7 +68,7 @@ async def stats(ctx):
         }},
         {'$project': {'_id': 0, 'top_score': 1, 'average_score': 1, 'total_score': 1, 'total_games': 1}}
     ]
-    result = list(guilds.aggregate(query))
+    main_result = list(guilds.aggregate(query))
 
     most_games_query = [
         {"$unwind": "$game_results"},
@@ -84,10 +84,10 @@ async def stats(ctx):
         total_games = result["total_games"]
         print(f"{i}. {guild_name}: {total_games} games")
 
-    if result:
+    if main_result:
         embed = discord.Embed(
             title='Guild Statistics',
-            description=f"Guild Name: **{ctx.guild.name}**\n\nTotal Games: **{result[0]['total_games']}**\nTotal Score: **{result[0]['total_score']}**\n\nAverage Score: **{int(result[0]['average_score'])}**\nTop Score: **{result[0]['top_score']}**"
+            description=f"Guild Name: **{ctx.guild.name}**\n\nTotal Games: **{main_result[0]['total_games']}**\nTotal Score: **{main_result[0]['total_score']}**\n\nAverage Score: **{int(main_result[0]['average_score'])}**\nTop Score: **{main_result[0]['top_score']}**"
         )
         embed.set_thumbnail(url=ctx.guild.icon.url)
         await ctx.send(embed=embed)
