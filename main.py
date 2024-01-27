@@ -28,7 +28,7 @@ async def save_game(guild_id, captcha_length, characters_and_numbers, score):
         'datetime': datetime.now(),
         'captcha_length': captcha_length,
         'characters_and_numbers': characters_and_numbers,
-        'score': 0
+        'score': score
     }
     guild = guilds.find_one({'_id': guild_id})
     if guild is None:
