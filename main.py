@@ -67,16 +67,15 @@ async def stats(ctx):
         }},
         {'$project': {'_id': 0, 'top_score': 1, 'average_score': 1, 'total_score': 1}}
     ]
-    result = list(guilds.aggregate(pipeline))
+    result = list(guilds.aggregate(query))
 
     if result:
         embed = discord.Embed(
-            title='Guild Statistics'
+            title='Guild Statistics',
+            description=f"**Guild Name**: {ctx.guild.name}\n\n**Top Score**: {result[0]['top_score']}\n**Average Scorr
+e**: {result[0]['average_score']}\n**Total Score**: {result[0]['total_score']}"
         )
-        embed.add_field(name='Top Score', value=scores_summary['top_score'], inline=False)
-        embed.add_field(name='Average Score', value=scores_summary['average_score'], inline=False)
-        embed.add_field(name='Total Score', value=scores_summary['total_score'], inline=False)
-        embed.set_thumbnail(url=ctx.guild.icon_url)
+        embed.set_thumbnail(url=ctx.guild.icon.url)
         await ctx.send(embed=embed)
     else:
         await ctx.send(f"<@ctx.user.id>, no game results found for this guild.")
