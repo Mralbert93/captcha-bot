@@ -54,22 +54,8 @@ class CustomHelpCommand(commands.HelpCommand):
 
 bot.help_command = CustomHelpCommand()
 
-@bot.command(name='stats')
+@bot.command(name='leaderboard', aliases=['lb'])
 async def stats(ctx):
-    main_query = [
-        {'$match': {'_id': ctx.guild.id}},
-        {'$unwind': '$game_results'},
-        {'$group': {
-            '_id': '$_id',
-            'top_score': {'$max': '$game_results.score'},
-            'average_score': {'$avg': '$game_results.score'},
-            'total_score': {'$sum': '$game_results.score'},
-            'total_games': {'$sum': 1}
-        }},
-        {'$project': {'_id': 0, 'top_score': 1, 'average_score': 1, 'total_score': 1, 'total_games': 1}}
-    ]
-    main_result = list(guilds.aggregate(main_query))
-
     most_games_query = [
         {"$unwind": "$game_results"},
         {"$group": {"_id": {"guild_id": "$_id"}, "total_games": {"$sum": 1}}},
@@ -115,35 +101,54 @@ async def stats(ctx):
         high_score = result["high_score"]
         top_high_score_string += f"{i}. {guild_name} ({high_score})\n"
 
+    embed = discord.Embed(
+        title='Most Games Played',
+        description=f"{most_games_string}",
+        color=discord.Color.purple()
+    )
+    embed.set_thumbnail(url=bot.user.avatar.url)
+    await ctx.send(embed=embed)
+
+    embed2 = discord.Embed(
+        title='Highest Total Score',
+        description=f"{most_sum_scores_string}",
+        color=discord.Color.purple()
+    )
+    embed2.set_thumbnail(url=bot.user.avatar.url)
+    await ctx.send(embed=embed2)
+
+    embed3 = discord.Embed(
+        title='Highest Single Score',
+        description=f"{top_high_score_string}",
+        color=discord.Color.purple()
+    )
+    embed3.set_thumbnail(url=bot.user.avatar.url)
+    await ctx.send(embed=embed3)
+
+@bot.command(name='stats')
+async def stats(ctx):
+    main_query = [
+        {'$match': {'_id': ctx.guild.id}},
+        {'$unwind': '$game_results'},
+        {'$group': {
+            '_id': '$_id',
+            'top_score': {'$max': '$game_results.score'},
+            'average_score': {'$avg': '$game_results.score'},
+            'total_score': {'$sum': '$game_results.score'},
+            'total_games': {'$sum': 1}
+        }},
+        {'$project': {'_id': 0, 'top_score': 1, 'average_score': 1, 'total_score': 1, 'total_games': 1}}
+    ]
+    main_result = list(guilds.aggregate(main_query))
+
     if main_result:
         embed = discord.Embed(
             title='Guild Statistics',
-            description=f"Guild Name: **{ctx.guild.name}**\n\nTotal Games: **{main_result[0]['total_games']}**\nTotal Score: **{main_result[0]['total_score']}**\nAverage Score: **{int(main_result[0]['average_score'])}**\nTop Score: **{main_result[0]['top_score']}**"
+            description=f"Guild Name: **{ctx.guild.name}**\n\nTotal Games: **{main_result[0]['total_games']}**\nTotal Score: **{main_result[0]['total_score']}**\nAverage Score: **{int(main_result[0]['average_score'])}**\nTop Score: **{main_result[0]['top_score']}**",
+            color=discord.Color.purple()
         )
         embed.set_thumbnail(url=ctx.guild.icon.url)
         await ctx.send(embed=embed)
-
-        embed2 = discord.Embed(
-            title='Most Games Played',
-            description=f"{most_games_string}"
-        )
-        embed2.set_thumbnail(url=bot.user.avatar.url)
-        await ctx.send(embed=embed2)
-
-        embed3 = discord.Embed(
-            title='Highest Total Score',
-            description=f"{most_sum_scores_string}"
-        )
-        embed3.set_thumbnail(url=bot.user.avatar.url)
-        await ctx.send(embed=embed3)
-
-        embed4 = discord.Embed(
-            title='Highest Single Score',
-            description=f"{top_high_score_string}"
-        )
-        embed4.set_thumbnail(url=bot.user.avatar.url)
-        await ctx.send(embed=embed4)
-    
     else:
         await ctx.send(f"<@ctx.user.id>, no game results found for this guild.")
 
