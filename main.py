@@ -100,6 +100,21 @@ async def stats(ctx):
         total_score = result["total_score"]
         most_sum_scores_string += f"{i}. {guild_name} ({total_score})\n"
 
+    high_score_query = [
+        {"$unwind": "$game_results"},
+        {"$group": {"_id": {"guild_id": "$_id"}, "high_score": {"$max": "$game_results.score"}}},
+        {"$sort": {"high_score": -1}},
+        {"$limit": 10}
+    ]
+    top_10_high_scores = list(guilds.aggregate(high_score_query))
+
+    top_high_score_string = ""
+    for i, result in enumerate(top_10_high_scores, 1):
+        guild_id = result["_id"]["guild_id"]
+        guild_name = bot.get_guild(guild_id).name
+        high_score = result["high_score"]
+        top_high_score_string += f"{i}. {guild_name} ({high_score})\n"
+
     if main_result:
         embed = discord.Embed(
             title='Guild Statistics',
@@ -121,6 +136,13 @@ async def stats(ctx):
         )
         embed3.set_thumbnail(url="https://webstockreview.net/images/clipart-png-trophy-3.png")
         await ctx.send(embed=embed3)
+
+        embed4 = discord.Embed(
+            title='Highest Single Score',
+            description=f"{top_high_score_string}"
+        )
+        embed4.set_thumbnail(url=bot.avatar.url)
+        await ctx.send(embed=embed4)
     
     else:
         await ctx.send(f"<@ctx.user.id>, no game results found for this guild.")
