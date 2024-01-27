@@ -85,10 +85,25 @@ async def stats(ctx):
         total_games = result["total_games"]
         most_games_string += f"{i}. {guild_name} ({total_games} games)\n"
 
+    most_sum_query = [
+        {"$unwind": "$game_results"},
+        {"$group": {"_id": {"guild_id": "$_id"}, "total_score": {"$sum": "$game_results.score"}}},
+        {"$sort": {"total_score": -1}},
+        {"$limit": 10}
+    ]
+    top_10_sum_scores = list(guilds.aggregate(most_sum_query))
+
+    most_sum_scores_string = ""
+    for i, result in enumerate(top_10_most_games, 1):
+        guild_id = result["_id"]["guild_id"]
+        guild_name = bot.get_guild(guild_id).name
+        total_games = result["total_games"]
+        most_sum_scores_string += f"{i}. {guild_name} ({total_score})\n"
+
     if main_result:
         embed = discord.Embed(
             title='Guild Statistics',
-            description=f"Guild Name: **{ctx.guild.name}**\n\n\n\nTotal Games: **{main_result[0]['total_games']}**\nTotal Score: **{main_result[0]['total_score']}**\nAverage Score: **{int(main_result[0]['average_score'])}**\nTop Score: **{main_result[0]['top_score']}**"
+            description=f"Guild Name: **{ctx.guild.name}**\n\nTotal Games: **{main_result[0]['total_games']}**\nTotal Score: **{main_result[0]['total_score']}**\nAverage Score: **{int(main_result[0]['average_score'])}**\nTop Score: **{main_result[0]['top_score']}**"
         )
         embed.set_thumbnail(url=ctx.guild.icon.url)
         await ctx.send(embed=embed)
@@ -98,8 +113,15 @@ async def stats(ctx):
             description=f"{most_games_string}"
         )
         embed2.set_thumbnail(url="https://webstockreview.net/images/clipart-png-trophy-3.png")
-
         await ctx.send(embed=embed2)
+
+        embed3 = discord.Embed(
+            title='Highest Total Score',
+            description=f"{most_sum_scores_string}"
+        )
+        embed3.set_thumbnail(url="https://webstockreview.net/images/clipart-png-trophy-3.png")
+        await ctx.send(embed=embed3)
+    
     else:
         await ctx.send(f"<@ctx.user.id>, no game results found for this guild.")
 
