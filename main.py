@@ -78,12 +78,12 @@ async def stats(ctx):
     ]
     top_5_most_games = list(guilds.aggregate(most_games_query))
 
-    most_games_string = "__**Most Games Played**__\n"
+    most_games_string = "__**Most Games Played:**__\n"
     for i, result in enumerate(top_5_most_games, 1):
         guild_id = result["_id"]["guild_id"]
         guild_name = bot.get_guild(guild_id).name
         total_games = result["total_games"]
-        most_games_string += f"{i}. {guild_name}: {total_games} games")
+        most_games_string += f"{i}. {guild_name} (total_games} games)"\n
 
     if main_result:
         embed = discord.Embed(
