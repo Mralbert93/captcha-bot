@@ -102,7 +102,7 @@ async def stats(ctx):
         top_high_score_string += f"{i}. {guild_name} ({high_score})\n"
 
     embed = discord.Embed(
-        title='Most Games Played',
+        title='Leaderboard - Most Games Played',
         description=f"{most_games_string}",
         color=discord.Color.purple()
     )
@@ -110,7 +110,7 @@ async def stats(ctx):
     await ctx.send(embed=embed)
 
     embed2 = discord.Embed(
-        title='Highest Total Score',
+        title='Leaderboard - Highest Total Score',
         description=f"{most_sum_scores_string}",
         color=discord.Color.purple()
     )
@@ -118,7 +118,7 @@ async def stats(ctx):
     await ctx.send(embed=embed2)
 
     embed3 = discord.Embed(
-        title='Highest Single Score',
+        title='Leaderboard - Highest Game Score',
         description=f"{top_high_score_string}",
         color=discord.Color.purple()
     )
