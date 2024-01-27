@@ -68,7 +68,7 @@ async def stats(ctx):
         }},
         {'$project': {'_id': 0, 'top_score': 1, 'average_score': 1, 'total_score': 1, 'total_games': 1}}
     ]
-    main_result = list(guilds.aggregate(query))
+    main_result = list(guilds.aggregate(main_query))
 
     most_games_query = [
         {"$unwind": "$game_results"},
@@ -78,16 +78,17 @@ async def stats(ctx):
     ]
     top_5_most_games = list(guilds.aggregate(most_games_query))
 
+    most_games_string = "__**Most Games Played**__\n"
     for i, result in enumerate(top_5_most_games, 1):
         guild_id = result["_id"]["guild_id"]
         guild_name = bot.get_guild(guild_id).name
         total_games = result["total_games"]
-        print(f"{i}. {guild_name}: {total_games} games")
+        most_games_string += f"{i}. {guild_name}: {total_games} games")
 
     if main_result:
         embed = discord.Embed(
             title='Guild Statistics',
-            description=f"Guild Name: **{ctx.guild.name}**\n\nTotal Games: **{main_result[0]['total_games']}**\nTotal Score: **{main_result[0]['total_score']}**\n\nAverage Score: **{int(main_result[0]['average_score'])}**\nTop Score: **{main_result[0]['top_score']}**"
+            description=f"Guild Name: **{ctx.guild.name}**\n\nTotal Games: **{main_result[0]['total_games']}**\nTotal Score: **{main_result[0]['total_score']}**\n\nAverage Score: **{int(main_result[0]['average_score'])}**\nTop Score: **{main_result[0]['top_score']}**\n\n{most_games_string}"
         )
         embed.set_thumbnail(url=ctx.guild.icon.url)
         await ctx.send(embed=embed)
