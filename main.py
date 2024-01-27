@@ -56,7 +56,7 @@ async def play(ctx, captcha_length: str = "6", characters_and_numbers: str = "Fa
     
     random_string = generate_captcha(captcha_length, characters_and_numbers)
     
-    file = discord.File(f"Captchas/{random_string}.png", filename=f"{random_string}.png")
+    file = discord.File(f"./captchas/{random_string}.png", filename=f"{random_string}.png")
     
     embed = discord.Embed(
         title='Solve the Captcha below',
@@ -109,7 +109,7 @@ async def on_message(message):
                 characters_and_numbers = captchas[message.channel.id]['characters_and_numbers']
                 random_string = generate_captcha(captcha_length, characters_and_numbers)
                 
-                file = discord.File(f"Captchas/{random_string}.png", filename=f"{random_string}.png")
+                file = discord.File(f"./captchas/{random_string}.png", filename=f"{random_string}.png")
                 
                 score = captchas[message.channel.id]['score']
                 progress = "🔥" * (int(score/5)+1)
