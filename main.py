@@ -74,24 +74,32 @@ async def stats(ctx):
         {"$unwind": "$game_results"},
         {"$group": {"_id": {"guild_id": "$_id"}, "total_games": {"$sum": 1}}},
         {"$sort": {"total_games": -1}},
-        {"$limit": 5}
+        {"$limit": 10}
     ]
-    top_5_most_games = list(guilds.aggregate(most_games_query))
+    top_10_most_games = list(guilds.aggregate(most_games_query))
 
     most_games_string = "__**Most Games Played:**__\n"
-    for i, result in enumerate(top_5_most_games, 1):
+    for i, result in enumerate(top_10_most_games, 1):
         guild_id = result["_id"]["guild_id"]
         guild_name = bot.get_guild(guild_id).name
         total_games = result["total_games"]
-        most_games_string += f"{i}. {guild_name} (total_games} games)"\n
+        most_games_string += f"{i}. {guild_name} ({total_games} games)\n"
 
     if main_result:
         embed = discord.Embed(
             title='Guild Statistics',
-            description=f"Guild Name: **{ctx.guild.name}**\n\nTotal Games: **{main_result[0]['total_games']}**\nTotal Score: **{main_result[0]['total_score']}**\n\nAverage Score: **{int(main_result[0]['average_score'])}**\nTop Score: **{main_result[0]['top_score']}**\n\n{most_games_string}"
+            description=f"Guild Name: **{ctx.guild.name}**\n\nTotal Games: **{main_result[0]['total_games']}**\nTotal Score: **{main_result[0]['total_score']}**\n\nAverage Score: **{int(main_result[0]['average_score'])}**\nTop Score: **{main_result[0]['top_score']}**"
         )
         embed.set_thumbnail(url=ctx.guild.icon.url)
         await ctx.send(embed=embed)
+
+         embed2 = discord.Embed(
+            title='Most Games Played',
+            description=f"{most_games_string}"
+        )
+        embed.set_thumbnail(url="https://webstockreview.net/images/clipart-png-trophy-3.png")
+
+        await ctx.send(embed=embed2)
     else:
         await ctx.send(f"<@ctx.user.id>, no game results found for this guild.")
 
