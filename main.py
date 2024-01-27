@@ -54,6 +54,33 @@ class CustomHelpCommand(commands.HelpCommand):
 
 bot.help_command = CustomHelpCommand()
 
+@bot.command(name='stats')
+async def stats(ctx):
+    query = [
+        {'$match': {'_id': ctx.guild.id}},
+        {'$unwind': '$game_results'},
+        {'$group': {
+            '_id': '$_id',
+            'top_score': {'$max': '$game_results.score'},
+            'average_score': {'$avg': '$game_results.score'},
+            'total_score': {'$sum': '$game_results.score'}
+        }},
+        {'$project': {'_id': 0, 'top_score': 1, 'average_score': 1, 'total_score': 1}}
+    ]
+    result = list(guilds.aggregate(pipeline))
+
+    if result:
+        embed = discord.Embed(
+            title='Guild Statistics'
+        )
+        embed.add_field(name='Top Score', value=scores_summary['top_score'], inline=False)
+        embed.add_field(name='Average Score', value=scores_summary['average_score'], inline=False)
+        embed.add_field(name='Total Score', value=scores_summary['total_score'], inline=False)
+        embed.set_thumbnail(url=ctx.guild.icon_url)
+        await ctx.send(embed=embed)
+    else:
+        await ctx.send(f"<@ctx.user.id>, no game results found for this guild.")
+
 @bot.command(name='play', aliases=['p'])
 async def play(ctx, captcha_length: str = "6", characters_and_numbers: str = "False"):
     captcha_info = captchas.get(ctx.channel.id, None)
