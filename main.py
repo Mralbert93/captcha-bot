@@ -127,21 +127,21 @@ async def stats(ctx):
             title='Most Games Played',
             description=f"{most_games_string}"
         )
-        embed2.set_thumbnail(url="https://webstockreview.net/images/clipart-png-trophy-3.png")
+        embed2.set_thumbnail(url=bot.user.avatar.url)
         await ctx.send(embed=embed2)
 
         embed3 = discord.Embed(
             title='Highest Total Score',
             description=f"{most_sum_scores_string}"
         )
-        embed3.set_thumbnail(url="https://webstockreview.net/images/clipart-png-trophy-3.png")
+        embed3.set_thumbnail(url=bot.user.avatar.url)
         await ctx.send(embed=embed3)
 
         embed4 = discord.Embed(
             title='Highest Single Score',
             description=f"{top_high_score_string}"
         )
-        embed4.set_thumbnail(url=bot.avatar.url)
+        embed4.set_thumbnail(url=bot.user.avatar.url)
         await ctx.send(embed=embed4)
     
     else:
