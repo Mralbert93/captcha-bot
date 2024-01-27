@@ -1,6 +1,6 @@
 import asyncio
 from captchas import generate_captcha, delete_captcha
-import datetime
+from datetime import datetime
 import discord
 from discord.ext import commands
 import os
