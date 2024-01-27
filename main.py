@@ -97,7 +97,7 @@ async def stats(ctx):
     for i, result in enumerate(top_10_most_games, 1):
         guild_id = result["_id"]["guild_id"]
         guild_name = bot.get_guild(guild_id).name
-        total_games = result["total_games"]
+        total_score = result["total_score"]
         most_sum_scores_string += f"{i}. {guild_name} ({total_score})\n"
 
     if main_result:
