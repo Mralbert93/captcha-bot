@@ -46,10 +46,9 @@ class CustomHelpCommand(commands.HelpCommand):
         ctx = self.context
         embed = discord.Embed(
             title="Help",
-            description="<@1200756820403306586> is a Captcha solving game.\nAnswer the captcha correctly in alloted time or you lose!\n\n`;play` - starts the game\n\nOptions:\n* *length* - the length of the captchas (defaults to 4)\n* *numbers* - whether to display letters and numbers (defaults to False)\n\nSample Usage:\n`;play` - starts a game with default settings\n`;play 4` - starts a game with 4 character captchas\n`;play 4 True` - starts a game with 4 character/number captchas\n-----\n;`statistics` - shows guild statistics\n-----\n`leaderboard` - shows global leaderboards\n\nContact <@838472003031793684> for support or data deletion requests.",
-            color=discord.Color.blue()
+            description="<@1200756820403306586> is a Captcha solving game.\nAnswer the captcha correctly in alloted time or you lose!\n\n-----\n\n`;play` - starts the game\n\nOptions:\n* *length* - the length of the captchas (defaults to 4)\n* *numbers* - whether to display letters and numbers (defaults to False)\n\nSample Usage:\n`;play` - starts a game with default settings\n`;play 4` - starts a game with 4 character captchas\n`;play 4 True` - starts a game with 4 character/number captchas\n\n-----\n\n`statistics` - shows guild statistics\n\n-----\n\n`leaderboard` - shows global leaderboards\n\nContact <@838472003031793684> for support or data deletion requests.",
+            color=discord.Color.purple()
         )
-
         await ctx.send(embed=embed)
 
 bot.help_command = CustomHelpCommand()
