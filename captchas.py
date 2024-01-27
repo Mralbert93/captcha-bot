@@ -17,9 +17,9 @@ def generate_captcha(captcha_length, characters_and_numbers):
     data: BytesIO = captcha.generate(random_string)
 
     image = Image.open(data)
-    image.save(f'captchas/{random_string}.png')
+    image.save(f'./captchas/{random_string}.png')
 
     return random_string
 
 def delete_captcha(string):
-    os.remove(f'captchas/{string}.png')
+    os.remove(f'./captchas/{string}.png')
