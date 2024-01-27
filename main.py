@@ -46,7 +46,7 @@ class CustomHelpCommand(commands.HelpCommand):
         ctx = self.context
         embed = discord.Embed(
             title="Help",
-            description="<@1200756820403306586> is a Captcha solving game.\nAnswer the captcha correctly in alloted time or you lose!\n\n`;play` - starts the game\n\nOptions:\n* *length* - the length of the captchas (defaults to 4)\n* *numbers* - whether to display letters and numbers (defaults to False)\n\nSample Usage:\n`;play` - starts a game with default settings\n`;play 4` - starts a game with 4 character captchas\n`;play 4 True` - starts a game with 4 character/number captchas",
+            description="<@1200756820403306586> is a Captcha solving game.\nAnswer the captcha correctly in alloted time or you lose!\n\n`;play` - starts the game\n\nOptions:\n* *length* - the length of the captchas (defaults to 4)\n* *numbers* - whether to display letters and numbers (defaults to False)\n\nSample Usage:\n`;play` - starts a game with default settings\n`;play 4` - starts a game with 4 character captchas\n`;play 4 True` - starts a game with 4 character/number captchas\n-----\n;`statistics` - shows guild statistics\n-----\n`leaderboard` - shows global leaderboards\n\nContact <@838472003031793684> for support or data deletion requests.",
             color=discord.Color.blue()
         )
 
@@ -125,8 +125,8 @@ async def stats(ctx):
     embed3.set_thumbnail(url=bot.user.avatar.url)
     await ctx.send(embed=embed3)
 
-@bot.command(name='stats')
-async def stats(ctx):
+@bot.command(name='statistics', aliases=['stats'])
+async def statistics(ctx):
     main_query = [
         {'$match': {'_id': ctx.guild.id}},
         {'$unwind': '$game_results'},
