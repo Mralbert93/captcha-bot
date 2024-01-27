@@ -94,7 +94,7 @@ async def stats(ctx):
     top_10_sum_scores = list(guilds.aggregate(most_sum_query))
 
     most_sum_scores_string = ""
-    for i, result in enumerate(top_10_most_games, 1):
+    for i, result in enumerate(top_10_sum_scores, 1):
         guild_id = result["_id"]["guild_id"]
         guild_name = bot.get_guild(guild_id).name
         total_score = result["total_score"]
