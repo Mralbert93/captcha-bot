@@ -72,7 +72,7 @@ async def stats(ctx):
 
     most_games_query = [
         {"$unwind": "$game_results"},
-        {"$group": {"_id": {"guild_id": "$_id", "guild_name": "$name"}, "total_games": {"$sum": 1}}},
+        {"$group": {"_id": {"guild_id": "$_id"}, "total_games": {"$sum": 1}}},
         {"$sort": {"total_games": -1}},
         {"$limit": 5}
     ]
