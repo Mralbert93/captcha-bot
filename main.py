@@ -93,11 +93,11 @@ async def stats(ctx):
         embed.set_thumbnail(url=ctx.guild.icon.url)
         await ctx.send(embed=embed)
 
-         embed2 = discord.Embed(
+        embed2 = discord.Embed(
             title='Most Games Played',
             description=f"{most_games_string}"
         )
-        embed.set_thumbnail(url="https://webstockreview.net/images/clipart-png-trophy-3.png")
+        embed2.set_thumbnail(url="https://webstockreview.net/images/clipart-png-trophy-3.png")
 
         await ctx.send(embed=embed2)
     else:
