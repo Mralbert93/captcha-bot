@@ -70,6 +70,19 @@ async def stats(ctx):
     ]
     result = list(guilds.aggregate(query))
 
+    most_games_query = [
+        {"$unwind": "$game_results"},
+        {"$group": {"_id": {"guild_id": "$_id", "guild_name": "$name"}, "total_games": {"$sum": 1}}},
+        {"$sort": {"total_games": -1}},
+        {"$limit": 5}
+    ]
+    top_5_most_games = list(guilds_collection.aggregate(most_games_query))
+
+    for i, result in enumerate(top_5_most_games, 1):
+        guild_name = result["_id"]["guild_name"]
+        total_games = result["total_games"]
+        print(f"{i}. {guild_name}: {total_games} games")
+
     if result:
         embed = discord.Embed(
             title='Guild Statistics',
