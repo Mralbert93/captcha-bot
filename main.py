@@ -102,10 +102,9 @@ async def play(ctx, captcha_length: str = "6", characters_and_numbers: str = "Fa
         embed.title = "Time is up!"
         embed.description = f"You have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[ctx.channel.id]['score']}\n\nPlay again with `;p` or `;play`"
         await challenge.edit(embed=embed)
+        await save_game(ctx.guild.id, captcha_length, characters_and_numbers, 0)
         delete_captcha(random_string)
         del captchas[ctx.channel.id]
-
-        await save_game(ctx.guild.id, captcha_length, characters_and_numbers, 0)
     else:
         return
 
@@ -157,9 +156,9 @@ async def on_message(message):
                     embed.title = "Time is up!"
                     embed.description = f"You have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[message.channel.id]['score']}\n{progress}\n\nPlay again with `;p` or `;play`"
                     await challenge.edit(embed=embed)
-                    delete_captcha(random_string)
-                    del captchas[message.channel.id] 
                     await save_game(message.guild.id, captchas[message.channel.id]['captcha_length'], captchas[message.channel.id]['characters_and_numbers'], captchas[message.channel.id]['score'])
+                    delete_captcha(random_string)
+                    del captchas[message.channel.id]
             else:
                 score = captchas[message.channel.id]['score']
                 progress = "🔥" * (int(score/5)+1)
@@ -170,10 +169,9 @@ async def on_message(message):
                     description=f"You have lost.\nThe correct answer was **{answer}**.\n\n**Final Score:** {captchas[message.channel.id]['score']}\n{progress}\n\nPlay again with `;p` or `;play`",
                 )
                 await message.channel.send(embed=embed)
+                await save_game(message.guild.id, captchas[message.channel.id]['captcha_length'], captchas[message.channel.id]['characters_and_numbers'], captchas[message.channel.id]['score'])
                 delete_captcha(answer)
                 del captchas[message.channel.id]
-                await save_game(message.guild.id, captchas[message.channel.id]['captcha_length'], captchas[message.channel.id]['characters_and_numbers'], captchas[message.channel.id]['score'])
-                
     await bot.process_commands(message)
     
 bot.run(token)
