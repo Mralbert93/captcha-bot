@@ -72,8 +72,7 @@ async def stats(ctx):
     if result:
         embed = discord.Embed(
             title='Guild Statistics',
-            description=f"**Guild Name**: {ctx.guild.name}\n\n**Top Score**: {result[0]['top_score']}\n**Average Scorr
-e**: {result[0]['average_score']}\n**Total Score**: {result[0]['total_score']}"
+            description=f"**Guild Name**: {ctx.guild.name}\n\n**Top Score**: {result[0]['top_score']}\n**Average Score**: {result[0]['average_score']}\n**Total Score**: {result[0]['total_score']}"
         )
         embed.set_thumbnail(url=ctx.guild.icon.url)
         await ctx.send(embed=embed)
