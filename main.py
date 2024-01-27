@@ -63,16 +63,17 @@ async def stats(ctx):
             '_id': '$_id',
             'top_score': {'$max': '$game_results.score'},
             'average_score': {'$avg': '$game_results.score'},
-            'total_score': {'$sum': '$game_results.score'}
+            'total_score': {'$sum': '$game_results.score'},
+            'total_games': {'$sum': 1}
         }},
-        {'$project': {'_id': 0, 'top_score': 1, 'average_score': 1, 'total_score': 1}}
+        {'$project': {'_id': 0, 'top_score': 1, 'average_score': 1, 'total_score': 1, 'total_games': 1}}
     ]
     result = list(guilds.aggregate(query))
 
     if result:
         embed = discord.Embed(
             title='Guild Statistics',
-            description=f"**Guild Name**: {ctx.guild.name}\n\n**Top Score**: {result[0]['top_score']}\n**Average Score**: {result[0]['average_score']}\n**Total Score**: {result[0]['total_score']}"
+            description=f"**Guild Name**: {ctx.guild.name}\n\n**Total Games**: {result[0]['total_games']}\n**Total Score**: {result[0]['total_score']}\n\n**Top Score**: {result[0]['top_score']}\n**Average Score**: {int(result[0]['average_score'])}"
         )
         embed.set_thumbnail(url=ctx.guild.icon.url)
         await ctx.send(embed=embed)
