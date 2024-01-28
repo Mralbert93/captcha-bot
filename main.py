@@ -252,6 +252,7 @@ async def on_message(message):
                 description=f"Thank you for voting for <@1200756820403306586> on Top.GG.\nIn order to be eligible for vote rewards, please play a game.",
                 color=discord.Color.purple()
             )
+            embed.set_thumbnail(url="https://cdn.discordapp.com/avatars/422087909634736160/d41e1166aadbba1fd62f6c43e2a15777.png")
             await user.send(embed=embed) 
             return
         else:
@@ -263,6 +264,7 @@ async def on_message(message):
                 description=f"Thank you for voting for <@1200756820403306586> on Top.GG.\n\nYou have received **10 extra lives** as a reward.\nYou now have **{extra_lives} extra lives** to use.\n\nDon't forget to vote again in 12 hours for more rewards!\n\n{user.mention}",
                 color=discord.Color.purple()
             )
+            embed.set_thumbnail(url="https://cdn.discordapp.com/avatars/422087909634736160/d41e1166aadbba1fd62f6c43e2a15777.png")
             await user.send(embed=embed) 
             return
         
