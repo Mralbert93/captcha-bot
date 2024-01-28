@@ -247,13 +247,23 @@ async def on_message(message):
         user_id = int(user.id)
         player = players.find_one({"_id": user_id})
         if player is None:
-            await user.send(f"Thank you for voting for <@1200756820403306586> on Top.GG.\nIn order to eligible for vote rewards, please play a game.\n{user.mention}") 
+            embed = discord.Embed(
+                title="Vote Confirmation",
+                description=f"Thank you for voting for <@{player_id}> on Top.GG.\nIn order to be eligible for vote rewards, please play a game.",
+                color=discord.Color.purple()
+            )
+            await user.send(embed=embed) 
             return
         else:
             players.update_one({"_id": user_id}, {"$inc": {"extra_lives": 10}})
             player = players.find_one({"_id": user_id})
             extra_lives = player["extra_lives"]
-            await user.send(f"Thank you for voting for <@1200756820403306586> on Top.GG.\nYou have received **10 extra lives** as a reward.\nYou now have **{extra_lives}** extra lives to use.\nDon't forget to vote again in 12 hours for more rewards!\n{user.mention}")
+            embed = discord.Embed(
+                title="Vote Confirmation",
+                description=f"Thank you for voting for <@1200756820403306586> on Top.GG.\nYou have received **10 extra lives** as a reward.\nYou now have **{extra_lives}** extra lives to use.\nDon't forget to vote again in 12 hours for more rewards!\n{user.mention}",
+                color=discord.Color.purple()
+            )
+            await user.send(embed=embed) 
             return
         
     if message.content != ";p" and message.content != ";play":
