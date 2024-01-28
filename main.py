@@ -244,7 +244,8 @@ async def on_message(message):
 
     if message.channel.id == 1201256347430289619 and message.author.bot:
         user = await bot.fetch_user(message.content)
-        player = players.find_one({"_id": user.id})
+        player = players.find_one({"_id": message.content})
+        print(player)
         if player is None:
             await user.send(f"Thank you for voting for <@1200756820403306586> on Top.GG.\nIn order to eligible for vote rewards, please play a game.\n{user.mention}") 
             return
