@@ -260,7 +260,7 @@ async def on_message(message):
             extra_lives = player["extra_lives"]
             embed = discord.Embed(
                 title="Vote Confirmation",
-                description=f"Thank you for voting for <@1200756820403306586> on Top.GG.\n\nYou have received **10 extra lives** as a reward.\nYou now have **{extra_lives}** extra lives to use.\n\nDon't forget to vote again in 12 hours for more rewards!\n\n{user.mention}",
+                description=f"Thank you for voting for <@1200756820403306586> on Top.GG.\n\nYou have received **10 extra lives** as a reward.\nYou now have **{extra_lives} extra lives** to use.\n\nDon't forget to vote again in 12 hours for more rewards!\n\n{user.mention}",
                 color=discord.Color.purple()
             )
             await user.send(embed=embed) 
