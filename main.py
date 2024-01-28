@@ -241,7 +241,12 @@ async def on_message(message):
     
     if message.author == bot.user:
         return
-    
+
+    if message.channel.id == 1201256347430289619 and message.author.bot:
+        user = await bot.fetch_user(message.content)
+        await user.send("Thank you for voting")
+        return
+        
     if message.content != ";p" and message.content != ";play":
 
         try:
