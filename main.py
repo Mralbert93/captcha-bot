@@ -149,13 +149,13 @@ async def statistics(ctx):
         embed.set_thumbnail(url=ctx.message.author.avatar.url)
         await ctx.send(embed=embed)
     else:
-        await ctx.send(f"<@ctx.message.author.id>, no game results found. Get playing!")
+        await ctx.send(f"<@{ctx.message.author.id}>, no game results found. Get playing!")
 
 @bot.command(name='play', aliases=['p'])
 async def play(ctx):
     captcha_info = captchas.get(ctx.user.id, None)
     if captcha_info:
-        await ctx.send(f"<@{ctx.author.id}>, you already are playing a game. Please finish it before starting a new game.")
+        await ctx.send(f"<@{ctx.message.author.id}>, you already are playing a game. Please finish it before starting a new game.")
         return
     
     random_string = generate_captcha()
