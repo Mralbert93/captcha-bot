@@ -137,6 +137,34 @@ async def statistics(ctx):
     ]
     main_result = list(players.aggregate(main_query))
 
+    rank_query = [
+        {
+            "$match": {"_id": player_id}
+        },
+        {
+            "$project": {
+                "total_score": {"$sum": "$games.score"},
+                "top_score": {"$max": "$games.score"}
+            }
+        },
+        {
+            "$group": {
+                "_id": None,
+                "total_score_rank": {"$sum": 1},
+                "top_score_rank": {"$sum": 1}
+            }
+        },
+        {
+            "$project": {
+                "_id": 0,
+                "total_score_rank": "$total_score_rank",
+                "top_score_rank": "$top_score_rank"
+            }
+        }
+    ]
+
+    rank_result = list(players_collection.aggregate(rank_query))
+
     if main_result:
         embed = discord.Embed(
             title='Player Statistics',
@@ -146,7 +174,9 @@ async def statistics(ctx):
         embed.add_field(name='Total Games', value=f"{main_result[0]['total_games']}", inline=True)
         embed.add_field(name='Total Score', value=f"{main_result[0]['total_score']}", inline=True)
         embed.add_field(name='High Score', value=f"{main_result[0]['top_score']}", inline=True)
-        embed.add_field(name='Player Accuracy', value=f"{int(main_result[0]['total_score'])/(int(main_result[0]['total_score'])+main_result[0]['total_games'])*100:.2f}%", inline=True)
+        embed.add_field(name='Accuracy', value=f"{int(main_result[0]['total_score'])/(int(main_result[0]['total_score'])+main_result[0]['total_games'])*100:.2f}%", inline=True)
+        embed.add_field(name='Total Score Rank', value=f"#{rank_result[0]['total_score_rank']}", inline=True)
+        embed.add_field(name='High Score Rank', value=f"#{rank_result[0]['top_score_rank']}", inline=True)
         embed.set_thumbnail(url=ctx.message.author.avatar.url)
         await ctx.send(embed=embed)
     else:
