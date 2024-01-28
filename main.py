@@ -37,9 +37,27 @@ async def save_game(player_id, guild_id, score):
         players.update_one({'_id': player_id}, {'$push': {'games': game}}, upsert=True)
     return
 
+async def get_games_count():
+    games_query = [
+        {
+            "$group": {
+                "_id": None,
+                "total_score": {"$sum": {"$sum": "$games.score"}}  
+            }
+        }
+    ]
+
+    return list(players.aggregate(games_query))[0]["total_score"]
+
 @bot.event
 async def on_ready():
     print(f'{bot.user} has connected to Discord!')
+
+    while True:
+            games_count = await get_games_count()
+            activity = discord.Watching(name=f"{games_count} Captchaas created")
+            await bot.change_presence(activity=activity)
+            await asyncio.sleep(60)
 
 class CustomHelpCommand(commands.HelpCommand):
     async def send_bot_help(self, mapping):
