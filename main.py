@@ -66,7 +66,7 @@ async def stats(ctx):
     most_games_string = ""
     for i, result in enumerate(top_10_most_games, 1):
         player_id = result["_id"]["player_id"]
-        guild_name = bot.get_user(player_id).name
+        player_name = bot.get_user(player_id).name
         total_games = result["total_games"]
         most_games_string += f"{i}. {player_name} ({total_games} games)\n"
 
