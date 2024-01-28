@@ -153,7 +153,7 @@ async def statistics(ctx):
 
 @bot.command(name='play', aliases=['p'])
 async def play(ctx):
-    captcha_info = captchas.get(ctx.message.user.id, None)
+    captcha_info = captchas.get(ctx.message.author.id, None)
     if captcha_info:
         await ctx.send(f"<@{ctx.message.author.id}>, you already are playing a game. Please finish it before starting a new game.")
         return
@@ -170,7 +170,7 @@ async def play(ctx):
 
     challenge = await ctx.send(embed=embed, file=file)
 
-    player_id = ctx.message.user.id
+    player_id = ctx.message.author.id
     captchas[player_id] = {
         'captcha_string': random_string,
         'score': 0
