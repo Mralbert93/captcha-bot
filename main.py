@@ -178,7 +178,7 @@ async def statistics(ctx):
     ]
 
     total_score_rank_result = list(players.aggregate(total_score_rank_query))
-    total_score_player_index = next((index for index, player in enumerate(total_score_rank_result) if player["_id"] == ctx.message.author.id), None)
+    total_score_player_index = next((index for index, player in enumerate(total_score_rank_result) if player["_id"] == ctx.message.author.id), None)+1
 
     high_score_rank_query = [
         {
@@ -204,7 +204,7 @@ async def statistics(ctx):
     ]
 
     high_score_rank_result = list(players.aggregate(high_score_rank_query))
-    high_score_player_index = next((index for index, player in enumerate(high_score_rank_result) if player["_id"] == ctx.message.author.id), None)
+    high_score_player_index = next((index for index, player in enumerate(high_score_rank_result) if player["_id"] == ctx.message.author.id), None)+1
 
     if main_result:
         embed = discord.Embed(
