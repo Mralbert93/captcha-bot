@@ -66,9 +66,8 @@ async def stats(ctx):
     most_games_string = ""
     for i, result in enumerate(top_10_most_games, 1):
         player_id = result["_id"]["player_id"]
-        player_name = bot.get_user(player_id).name
         total_games = result["total_games"]
-        most_games_string += f"{i}. {player_name} ({total_games} games)\n"
+        most_games_string += f"{i}. <@{player_id}> ({total_games} games)\n"
 
     most_sum_query = [
         {"$unwind": "$games"},
@@ -81,9 +80,8 @@ async def stats(ctx):
     most_sum_scores_string = ""
     for i, result in enumerate(top_10_sum_scores, 1):
         player_id = result["_id"]["player_id"]
-        player_name = bot.get_user(player_id).name
         total_score = result["total_score"]
-        most_sum_scores_string += f"{i}. {player_name} ({total_score})\n"
+        most_sum_scores_string += f"{i}. <@{player_id}> ({total_score})\n"
 
     high_score_query = [
         {"$unwind": "$games"},
@@ -96,9 +94,8 @@ async def stats(ctx):
     top_high_score_string = ""
     for i, result in enumerate(top_10_high_scores, 1):
         player_id = result["_id"]["player_id"]
-        player_name = bot.get_user(player_id).name
         high_score = result["high_score"]
-        top_high_score_string += f"{i}. {player_name} ({high_score})\n"
+        top_high_score_string += f"{i}. <@{player_id}> ({high_score})\n"
 
     embed = discord.Embed(
         title='Leaderboard - Most Games Played',
