@@ -280,12 +280,12 @@ async def on_message(message):
             await user.send(embed=embed) 
             return
         else:
-            players.update_one({"_id": user_id}, {"$inc": {"extra_lives": 10}})
+            players.update_one({"_id": user_id}, {"$inc": {"skips": 10}})
             player = players.find_one({"_id": user_id})
-            extra_lives = player["extra_lives"]
+            skips = player["skips"]
             embed = discord.Embed(
                 title="Vote Confirmation",
-                description=f"Thank you for voting for <@1200756820403306586> on Top.GG.\n\nYou have received **10 extra lives** as a reward.\nYou now have **{extra_lives} extra lives** to use.\n\nDon't forget to vote again in 12 hours for more rewards!\n\n{user.mention}",
+                description=f"Thank you for voting for <@1200756820403306586> on Top.GG.\n\nYou have received **10 skips** as a reward.\nYou now have **{skips} skips** to use.\n\nDon't forget to vote again in 12 hours for more rewards!\n\n{user.mention}",
                 color=discord.Color.purple()
             )
             embed.set_thumbnail(url="https://cdn.discordapp.com/avatars/422087909634736160/d41e1166aadbba1fd62f6c43e2a15777.png")
