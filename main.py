@@ -154,43 +154,57 @@ async def statistics(ctx):
     ]
     main_result = list(players.aggregate(main_query))
 
-    rank_query = [
+    total_score_rank_query = [
         {
             "$unwind": "$games"
         },
         {
             "$group": {
                 "_id": "$_id",
-                "total_score": {"$sum": "$games.score"},
-                "top_score": {"$max": "$games.score"}
+                "total_score": {"$sum": "$games.score"}
             }
         },
         {
             "$sort": {
-                "total_score": -1,  # Sort in descending order
-                "top_score": -1
+                "total_score": -1
             }
-        },
-        {
-            "$group": {
-                "_id": "$_id",
-                "total_score_rank": {"$sum": 1},
-                "top_score_rank": {"$sum": 1}
-            }
-        },
-        {
-            "$match": {"_id": ctx.message.author.id}
         },
         {
             "$project": {
-                "_id": 0,
-                "total_score_rank": "$total_score_rank",
-                "top_score_rank": "$top_score_rank"
+                "_id": 1,
+                "total_score": 1
             }
         }
     ]
 
-    rank_result = list(players.aggregate(rank_query))
+    total_score_rank_result = list(players.aggregate(total_score_rank_query))
+    total_score_player_index = next((index for index, player in enumerate(total_score_rank_result) if player["_id"] == ctx.message.author.id), None)
+
+    high_score_rank_query = [
+        {
+            "$unwind": "$games"
+        },
+        {
+            "$group": {
+                "_id": "$_id",
+                "high_score": {"$max": "$games.score"}
+            }
+        },
+        {
+            "$sort": {
+                "high_score": -1
+            }
+        },
+        {
+            "$project": {
+                "_id": 1,
+                "high_score": 1
+            }
+        }
+    ]
+
+    high_score_rank_result = list(players.aggregate(high_score_rank_query))
+    high_score_player_index = next((index for index, player in enumerate(high_score_rank_result) if player["_id"] == ctx.message.author.id), None)
 
     if main_result:
         embed = discord.Embed(
@@ -202,8 +216,8 @@ async def statistics(ctx):
         embed.add_field(name='Total Score', value=f"{main_result[0]['total_score']}", inline=True)
         embed.add_field(name='High Score', value=f"{main_result[0]['top_score']}", inline=True)
         embed.add_field(name='Accuracy', value=f"{int(main_result[0]['total_score'])/(int(main_result[0]['total_score'])+main_result[0]['total_games'])*100:.2f}%", inline=True)
-        embed.add_field(name='Total Score Rank', value=f"#{rank_result[0]['total_score_rank']}", inline=True)
-        embed.add_field(name='High Score Rank', value=f"#{rank_result[0]['top_score_rank']}", inline=True)
+        embed.add_field(name='Total Score Rank', value=total_score_player_index, inline=True)
+        embed.add_field(name='High Score Rank', value=high_score_player_index, inline=True)
         embed.set_thumbnail(url=ctx.message.author.avatar.url)
         await ctx.send(embed=embed)
     else:
