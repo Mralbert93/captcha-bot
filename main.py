@@ -216,8 +216,8 @@ async def statistics(ctx):
         embed.add_field(name='Total Score', value=f"{main_result[0]['total_score']}", inline=True)
         embed.add_field(name='High Score', value=f"{main_result[0]['top_score']}", inline=True)
         embed.add_field(name='Accuracy', value=f"{int(main_result[0]['total_score'])/(int(main_result[0]['total_score'])+main_result[0]['total_games'])*100:.2f}%", inline=True)
-        embed.add_field(name='Total Score Rank', value=total_score_player_index, inline=True)
-        embed.add_field(name='High Score Rank', value=high_score_player_index, inline=True)
+        embed.add_field(name='Total Score Rank', value=f"#{total_score_player_index}", inline=True)
+        embed.add_field(name='High Score Rank', value=f"#{high_score_player_index, inline}"=True)
         embed.set_thumbnail(url=ctx.message.author.avatar.url)
         await ctx.send(embed=embed)
     else:
