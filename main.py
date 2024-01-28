@@ -55,7 +55,7 @@ async def on_ready():
 
     while True:
             games_count = await get_games_count()
-            await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f"{games_count} Captchaas created"))
+            await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f"{games_count} Captchas"))
             await asyncio.sleep(60)
 
 class CustomHelpCommand(commands.HelpCommand):
