@@ -127,7 +127,7 @@ async def stats(ctx):
 @bot.command(name='statistics', aliases=['stats'])
 async def statistics(ctx):
     main_query = [
-        {'$match': {'_id': ctx.user.id}},
+        {'$match': {'_id': ctx.message.author.id}},
         {'$unwind': '$games'},
         {'$group': {
             '_id': '$_id',
@@ -143,13 +143,13 @@ async def statistics(ctx):
     if main_result:
         embed = discord.Embed(
             title='Player Statistics',
-            description=f"Player Name: **{ctx.user.name}**\n\nTotal Games: **{main_result[0]['total_games']}**\nTotal Score: **{main_result[0]['total_score']}**\nAverage Score: **{int(main_result[0]['average_score'])}**\nTop Score: **{main_result[0]['top_score']}**",
+            description=f"Player Name: **{ctx.message.author.name}**\n\nTotal Games: **{main_result[0]['total_games']}**\nTotal Score: **{main_result[0]['total_score']}**\nAverage Score: **{int(main_result[0]['average_score'])}**\nTop Score: **{main_result[0]['top_score']}**",
             color=discord.Color.purple()
         )
-        embed.set_thumbnail(url=ctx.user.avatar.url)
+        embed.set_thumbnail(url=ctx.message.author.avatar.url)
         await ctx.send(embed=embed)
     else:
-        await ctx.send(f"<@ctx.user.id>, no game results found. Get playing!")
+        await ctx.send(f"<@ctx.message.author.id>, no game results found. Get playing!")
 
 @bot.command(name='play', aliases=['p'])
 async def play(ctx):
