@@ -250,7 +250,7 @@ async def on_message(message):
             return
         else:
             players.update_one({"id": player_id}, {"$inc": {"extra_lives": 10}})
-            player = collection.find_one({"id": player_id})
+            player = players.find_one({"id": player_id})
             extra_lives = player["extra_lives"]
             await user.send(f"Thank you for voting for <@1200756820403306586> on Top.GG.\nYou have received **10 extra lives** as a reward.\nYou now have **{extra_lives}** extra lives to use.\nDon't forget to vote again in 12 hours for more rewards!\n{user.mention}")
             return
