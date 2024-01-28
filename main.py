@@ -140,9 +140,13 @@ async def statistics(ctx):
     if main_result:
         embed = discord.Embed(
             title='Player Statistics',
-            description=f"Player Name: **{ctx.message.author.name}**\n\nTotal Games: **{main_result[0]['total_games']}**\nTotal Score: **{main_result[0]['total_score']}**\nAverage Score: **{int(main_result[0]['average_score'])}**\nTop Score: **{main_result[0]['top_score']}**",
             color=discord.Color.purple()
         )
+        embed.add_field(name='Player Name', value=f"**{ctx.author.name}**", inline=False)
+        embed.add_field(name='Total Games', value=f"**{main_result[0]['total_games']}**", inline=True)
+        embed.add_field(name='Total Score', value=f"**{main_result[0]['total_score']}**", inline=True)
+        embed.add_field(name='Average Score', value=f"**{int(main_result[0]['average_score'])}**", inline=True)
+        embed.add_field(name='Top Score', value=f"**{main_result[0]['top_score']}**", inline=True)
         embed.set_thumbnail(url=ctx.message.author.avatar.url)
         await ctx.send(embed=embed)
     else:
