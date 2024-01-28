@@ -143,7 +143,7 @@ async def statistics(ctx):
             color=discord.Color.purple()
         )
         embed.add_field(name='Player Name', value=f"{ctx.author.name}", inline=False)
-        embed.add_field(name='Total Games Played', value=f"{main_result[0]['total_games']}", inline=True)
+        embed.add_field(name='Total Games', value=f"{main_result[0]['total_games']}", inline=True)
         embed.add_field(name='Total Score', value=f"{main_result[0]['total_score']}", inline=True)
         embed.add_field(name='High Score', value=f"{main_result[0]['top_score']}", inline=True)
         embed.add_field(name='Player Accuracy', value=f"{int(main_result[0]['total_score'])/(int(main_result[0]['total_score'])+main_result[0]['total_games'])*100:.2f}%", inline=True)
