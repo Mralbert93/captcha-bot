@@ -246,7 +246,7 @@ async def on_message(message):
         user = await bot.fetch_user(message.content)
         player = players.find_one({"id": user.id})
         if player is None:
-            await user.send(f"Thank you for voting for <@1200756820403306586> on Top.GG.\nIn order to eligible for vote rewards, please play a game.\n{user.mention}")") 
+            await user.send(f"Thank you for voting for <@1200756820403306586> on Top.GG.\nIn order to eligible for vote rewards, please play a game.\n{user.mention}") 
             return
         else:
             players.update_one({"id": player_id}, {"$inc": {"extra_lives": 10}})
