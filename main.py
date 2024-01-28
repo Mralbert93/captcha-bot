@@ -163,7 +163,7 @@ async def statistics(ctx):
         }
     ]
 
-    rank_result = list(players_collection.aggregate(rank_query))
+    rank_result = list(players.aggregate(rank_query))
 
     if main_result:
         embed = discord.Embed(
