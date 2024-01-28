@@ -6,12 +6,8 @@ from captcha.image import ImageCaptcha
 from PIL import Image
 import os
 
-def generate_captcha(captcha_length, characters_and_numbers):
-    if characters_and_numbers == True:
-        style = string.ascii_uppercase + string.digits
-    else:
-        style = string.ascii_uppercase
-    random_string = ''.join(random.choices(style, k=captcha_length))
+def generate_captcha():
+    random_string = ''.join(random.choices(string.ascii_uppercase, k=6))
 
     captcha = ImageCaptcha()
     data: BytesIO = captcha.generate(random_string)
