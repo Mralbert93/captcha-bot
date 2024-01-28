@@ -244,7 +244,7 @@ async def on_message(message):
 
     if message.channel.id == 1201256347430289619 and message.author.bot:
         user = await bot.fetch_user(message.content)
-        await user.send("Thank you for voting")
+        await user.send(f"Thank you for voting for <@1200756820403306586>. You have received **10 extra lives** as a reward. Don't forget to vote again in 12 hours for more rewards!\n{user.mention}")
         return
         
     if message.content != ";p" and message.content != ";play":
