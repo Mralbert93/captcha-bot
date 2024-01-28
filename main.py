@@ -249,7 +249,7 @@ async def on_message(message):
         if player is None:
             embed = discord.Embed(
                 title="Vote Confirmation",
-                description=f"Thank you for voting for <@{player_id}> on Top.GG.\nIn order to be eligible for vote rewards, please play a game.",
+                description=f"Thank you for voting for <@1200756820403306586> on Top.GG.\nIn order to be eligible for vote rewards, please play a game.",
                 color=discord.Color.purple()
             )
             await user.send(embed=embed) 
