@@ -156,20 +156,30 @@ async def statistics(ctx):
 
     rank_query = [
         {
-            "$match": {"_id": ctx.message.author.id}
+            "$unwind": "$games"
         },
         {
-            "$project": {
+            "$group": {
+                "_id": "$_id",
                 "total_score": {"$sum": "$games.score"},
                 "top_score": {"$max": "$games.score"}
             }
         },
         {
+            "$sort": {
+                "total_score": -1,  # Sort in descending order
+                "top_score": -1
+            }
+        },
+        {
             "$group": {
-                "_id": None,
+                "_id": "$_id",
                 "total_score_rank": {"$sum": 1},
                 "top_score_rank": {"$sum": 1}
             }
+        },
+        {
+            "$match": {"_id": ctx.message.author.id}
         },
         {
             "$project": {
