@@ -244,8 +244,16 @@ async def on_message(message):
 
     if message.channel.id == 1201256347430289619 and message.author.bot:
         user = await bot.fetch_user(message.content)
-        await user.send(f"Thank you for voting for <@1200756820403306586>. You have received **10 extra lives** as a reward. Don't forget to vote again in 12 hours for more rewards!\n{user.mention}")
-        return
+        player = collection.find_one({"id": player_id})
+        if player is None:
+            await user.send(f"Thank you for voting for <@1200756820403306586> on Top.GG.\nIn order to eligible for vote rewards, please play a game.") 
+            return
+        else:
+            players.update_one({"id": player_id}, {"$inc": {"extra_lives": 10}})
+            player = collection.find_one({"id": player_id})
+            extra_lives = player["extra_lives"]
+            await user.send(f"Thank you for voting for <@1200756820403306586> on Top.GG.\nYou have received **10 extra lives** as a reward.\nYou now have **{extra_lives}** extra lives to use.\nDon't forget to vote again in 12 hours for more rewards!\n{user.mention}")
+            return
         
     if message.content != ";p" and message.content != ";play":
 
