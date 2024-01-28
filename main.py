@@ -161,7 +161,7 @@ async def play(ctx):
     
     embed = discord.Embed(
         title='Solve the Captcha below',
-        description=f'Time is up <t:{get_countdown()}:R>',
+        description=f'<@{ctx.message.author.id}>\n\nTime is up <t:{get_countdown()}:R>',
     )
     embed.set_image(url=f"attachment://{random_string}.png")
 
@@ -176,7 +176,7 @@ async def play(ctx):
     await asyncio.sleep(10)
     if captchas.get(player_id, {}).get('captcha_string') == random_string:
         embed.title = "Time is up!"
-        embed.description = f"You have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[player_id]['score']}\n\nPlay again with `;p` or `;play`"
+        embed.description = f"<@{player_id}>, you have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[player_id]['score']}\n\nPlay again with `;p` or `;play`"
         await challenge.edit(embed=embed)
         await save_game(player_id, ctx.guild.id, 0)
         delete_captcha(random_string)
@@ -218,7 +218,7 @@ async def on_message(message):
                 
                 embed = discord.Embed(
                     title='Solve the Captcha below',
-                    description=f"**Score:** {score}\n{progress}\n\nTime is up <t:{get_countdown()}:R>",
+                    description=f"<@{ctx.message.author.id}>\n\n**Score:** {score}\n{progress}\n\nTime is up <t:{get_countdown()}:R>",
                 )
                 embed.set_image(url=f"attachment://{random_string}.png")
 
@@ -230,7 +230,7 @@ async def on_message(message):
                 await asyncio.sleep(10)
                 if captchas.get(player_id, {}).get('captcha_string') == random_string:
                     embed.title = "Time is up!"
-                    embed.description = f"You have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[player_id]['score']}\n{progress}\n\nPlay again with `;p` or `;play`"
+                    embed.description = f"<@{player_id}>, you have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[player_id]['score']}\n{progress}\n\nPlay again with `;p` or `;play`"
                     await challenge.edit(embed=embed)
                     await save_game(player_id, message.guild.id, captchas[player_id]['score'])
                     delete_captcha(random_string)
@@ -242,7 +242,7 @@ async def on_message(message):
                     progress = ""
                 embed = discord.Embed(
                     title="Wrong Answer",
-                    description=f"You have lost.\nThe correct answer was **{answer}**.\n\n**Final Score:** {captchas[player_id]['score']}\n{progress}\n\nPlay again with `;p` or `;play`",
+                    description=f"<@{player_id}>, you have lost.\nThe correct answer was **{answer}**.\n\n**Final Score:** {captchas[player_id]['score']}\n{progress}\n\nPlay again with `;p` or `;play`",
                 )
                 await message.channel.send(embed=embed)
                 await save_game(player_id, message.guild.id, captchas[player_id]['score'])
