@@ -139,7 +139,7 @@ async def statistics(ctx):
 
     rank_query = [
         {
-            "$match": {"_id": player_id}
+            "$match": {"_id": ctx.message.author.id}
         },
         {
             "$project": {
