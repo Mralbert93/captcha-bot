@@ -218,7 +218,7 @@ async def on_message(message):
                 
                 embed = discord.Embed(
                     title='Solve the Captcha below',
-                    description=f"<@{ctx.message.author.id}>\n\n**Score:** {score}\n{progress}\n\nTime is up <t:{get_countdown()}:R>",
+                    description=f"<@{message.author.id}>\n\n**Score:** {score}\n{progress}\n\nTime is up <t:{get_countdown()}:R>",
                 )
                 embed.set_image(url=f"attachment://{random_string}.png")
 
