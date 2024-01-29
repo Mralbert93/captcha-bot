@@ -87,6 +87,8 @@ async def on_ready():
     print(f'{bot.user} has connected to Discord!')
 
     guild = bot.get_guild(1201163257461866596)
+
+    global novice, apprentice, explorer, enthusiast, master, grandmaster, overlord
     
     novice = discord.utils.get(guild.roles, id=1201493503096651816)
     apprentice = discord.utils.get(guild.roles, id=1201493685775368272)
@@ -96,7 +98,6 @@ async def on_ready():
     grandmaster = discord.utils.get(guild.roles, id=1201494061522092092)
     overlord = discord.utils.get(guild.roles, id=1201494156950909010)
 
-    global role_thresholds
     role_thresholds = {
         novice: 10,
         apprentice: 25,
@@ -107,6 +108,7 @@ async def on_ready():
         overlord: 1000
     }
 
+    print(role_thresholds)
     while True:
             games_count = await get_games_count()
             await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f"{games_count} Captchas"))
