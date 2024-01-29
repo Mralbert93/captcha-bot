@@ -17,7 +17,7 @@ db = mongo.captcha
 players = db["players"]
 
 captchas = {}
-role_thresholds = {}
+role_thresholds = None
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -88,7 +88,7 @@ async def on_ready():
 
     guild = bot.get_guild(1201163257461866596)
 
-    global novice, apprentice, explorer, enthusiast, master, grandmaster, overlord
+    global novice, apprentice, explorer, enthusiast, master, grandmaster, overlord, role_thresholds
     
     novice = discord.utils.get(guild.roles, id=1201493503096651816)
     apprentice = discord.utils.get(guild.roles, id=1201493685775368272)
