@@ -49,6 +49,14 @@ async def get_games_count():
 
     return list(players.aggregate(games_query))[0]["total_score"]
 
+async def get_skips(player_id): 
+    player_object = players.find_one({"_id": player_id})
+
+    if player_object is None:
+        return None
+    else:
+        return player_object.get("skips")
+
 @bot.event
 async def on_ready():
     print(f'{bot.user} has connected to Discord!')
@@ -350,5 +358,54 @@ async def on_message(message):
                 delete_captcha(answer)
                 del captchas[player_id]
     await bot.process_commands(message)
+
+@bot.command(name='skip', aliases=['s'])
+async def play(ctx):
+    player_id = ctx.message.author.id
+    try:
+        captcha_info = captchas.get(player_id)
+    except Exception as e:
+        await ctx.send("<@{ctx.author.mention}>, you must be playing a game to use a skip.")
+        return
+
+    skips = get_skips(player_id)
+    if skips > 0:
+        players.update_one({"_id": player_id}, {"$inc": {"skips": -1}})
+        
+        captcha_info = captchas.get(player_id)
+        captchas[player_id]['captcha_string'] = ""
+        delete_captcha(answer)
+
+        random_string = generate_captcha()
+
+        file = discord.File(f"/usr/bot/captcha-bot/captchas/{random_string}.png", filename=f"{random_string}.png")
+                
+        score = captchas[player_id]['score']
+        progress = "🔥" * (int(score/5)+1)
+        if score == 0:
+            progress = ""
+                
+        embed = discord.Embed(
+            title='Solve the Captcha below',
+            description=f"<@{message.author.id}>, you have chosen to skip. You have {skips-1} skips left.\n\n**Score:** {score}\n{progress}\n\nTime is up <t:{get_countdown()}:R>",
+        )
+        embed.set_image(url=f"attachment://{random_string}.png")
+
+        challenge = await message.channel.send(embed=embed, file=file)
+
+        captchas[player_id]['captcha_string'] = random_string
+    
+        score = captchas[player_id]['score']
+        await asyncio.sleep(10)
+        if captchas.get(player_id, {}).get('captcha_string') == random_string:
+            embed.title = "Time is up!"
+            embed.description = f"<@{player_id}>, you have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[player_id]['score']}\n{progress}\n\nPlay again with `;p` or `;play`"
+            await challenge.edit(embed=embed)
+            await save_game(player_id, message.guild.id, captchas[player_id]['score'])
+            delete_captcha(random_string)
+            del captchas[player_id]
+    else:
+        await ctx.send("<@{ctx.author.mention}>, you have no skips left. You can get more skips from `;shop` or `;vote.`")
+        return
     
 bot.run(token)
