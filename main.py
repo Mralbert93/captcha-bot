@@ -456,7 +456,7 @@ async def buy(ctx, quantity: int):
         try:
             coins = result["coins"]
             if coins > (quantity*1000):
-                players.update_one( {"_id": ctx.message.author.id}, "$inc": {"coins": -1000*quantity, "skips": quantity})
+                players.update_one({"_id": ctx.message.author.id}, {"$inc": {"coins": -1000 * quantity, "skips": quantity}})
                 embed = discord.Embed(
                     title="Skips Purchased",
                     description=f"{ctx.author.mention}, you have bought {quantity} skips for {1000*quantity} coins :coin:.\nYou have {(coins-(quantity*1000)) coins :coin: left.",
