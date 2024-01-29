@@ -470,7 +470,7 @@ async def skip(ctx):
 async def vote(ctx):
     embed = discord.Embed(
             title="Coins Balance",
-            description=f"You can vote every 12 hours for the bot using the link below:\n\nhttps://top.gg/bot/1200756820403306586/vote\n\nAfter voting, you will be automatically rewarded **10 skips**.\n\n{ctx.author.mention}",
+            description=f"You can vote every **12 hours** for the {bot.user.mention} using the link below.\n\nhttps://top.gg/bot/1200756820403306586/vote\n\nAfter voting, you will be automatically rewarded **10 skips**.\n\n{ctx.author.mention}",
             color=discord.Color.purple()
         )
     embed.set_thumbnail(url="https://cdn.discordapp.com/avatars/422087909634736160/d41e1166aadbba1fd62f6c43e2a15777.png")
