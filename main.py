@@ -70,7 +70,7 @@ async def check_roles(player_id):
         }},
         {'$project': {'_id': 0, 'top_score': 1}}
     ]
-    top_score = list(players.aggregate(high_score_query))['top_score']
+    top_score = list(players.aggregate(high_score_query))[0]['top_score']
 
     role_thresholds = {
         novice: 10,
