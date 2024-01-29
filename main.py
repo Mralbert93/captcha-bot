@@ -424,7 +424,7 @@ async def coins(ctx):
         coins = result["coins"]
         await ctx.send(f"{ctx.author.mention}, you have **{coins} coins** :coin:. Keep playing to get more!")
         return
-    else:
+    except Exception as e:
         await ctx.send(f"{ctx.author.mention}, you don't have any coins. Start playing to get some!")
         return
     
