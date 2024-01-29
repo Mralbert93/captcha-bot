@@ -388,11 +388,11 @@ async def play(ctx):
                 
         embed = discord.Embed(
             title='Solve the Captcha below',
-            description=f"<@{message.author.id}>, you have chosen to skip. You have {skips-1} skips left.\n\n**Score:** {score}\n{progress}\n\nTime is up <t:{get_countdown()}:R>",
+            description=f"<@{ctx.message.author.id}>, you have chosen to skip. You have {skips-1} skips left.\n\n**Score:** {score}\n{progress}\n\nTime is up <t:{get_countdown()}:R>",
         )
         embed.set_image(url=f"attachment://{random_string}.png")
 
-        challenge = await message.channel.send(embed=embed, file=file)
+        challenge = await ctx.send(embed=embed, file=file)
 
         captchas[player_id]['captcha_string'] = random_string
     
@@ -402,7 +402,7 @@ async def play(ctx):
             embed.title = "Time is up!"
             embed.description = f"<@{player_id}>, you have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[player_id]['score']}\n{progress}\n\nPlay again with `;p` or `;play`"
             await challenge.edit(embed=embed)
-            await save_game(player_id, message.guild.id, captchas[player_id]['score'])
+            await save_game(player_id, ctx.message.guild.id, captchas[player_id]['score'])
             delete_captcha(random_string)
             del captchas[player_id]
     else:
