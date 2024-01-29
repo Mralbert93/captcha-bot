@@ -287,7 +287,13 @@ async def statistics(ctx):
 async def play(ctx):
     captcha_info = captchas.get(ctx.message.author.id, None)
     if captcha_info:
-        await ctx.send(f"<@{ctx.message.author.id}>, you already are playing a game. Please finish it before starting a new game.")
+        embed = discord.Embed(
+                title="Game Already Running",
+                description=f"You already are playing a game. Please finish it before starting a new game.\n\n@{ctx.message.author.id}>",
+                color=discord.Color.red()
+            )
+        embed.set_thumbnail(url="https://i.ibb.co/tptVTTH/toppng-com-red-x-in-circle-x-ico-2000x2000-removebg-preview.png")
+        await ctx.send(embed=embed)
         return
     
     random_string = generate_captcha()
@@ -296,7 +302,8 @@ async def play(ctx):
     
     embed = discord.Embed(
         title='Solve the Captcha below',
-        description=f'<@{ctx.message.author.id}>\n\nTime is up <t:{get_countdown()}:R>',
+        description=f'Time is up <t:{get_countdown()}:R>\n\n<@{ctx.message.author.id}>',
+        color=discord.Color.purple()
     )
     embed.set_image(url=f"attachment://{random_string}.png")
 
@@ -311,7 +318,7 @@ async def play(ctx):
     await asyncio.sleep(10)
     if captchas.get(player_id, {}).get('captcha_string') == random_string:
         embed.title = "Time is up!"
-        embed.description = f"<@{player_id}>, you have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[player_id]['score']}\n\nPlay again with `;p` or `;play`"
+        embed.description = f"You have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[player_id]['score']}\n\nPlay again with `;p` or `;play`\n\n<@{player_id}>"
         await challenge.edit(embed=embed)
         await save_game(player_id, ctx.guild.id, 0)
         delete_captcha(random_string)
@@ -380,7 +387,8 @@ async def on_message(message):
                 
                 embed = discord.Embed(
                     title='Solve the Captcha below',
-                    description=f"<@{message.author.id}>, you have {skips} skips left.\nYou can use `;skip` or `;s` to skip.\n\n**Score:** {score}\n{progress}\n\nTime is up <t:{get_countdown()}:R>",
+                    description=f"You have **{skips} skips** left.\nYou can use `;skip` or `;s` to skip.\n\n**Score:** {score}\n{progress}\n\nTime is up <t:{get_countdown()}:R>\n\n<@{message.author.id}>",
+                    color=discord.Color.purple()
                 )
                 embed.set_image(url=f"attachment://{random_string}.png")
 
@@ -392,7 +400,8 @@ async def on_message(message):
                 await asyncio.sleep(10)
                 if captchas.get(player_id, {}).get('captcha_string') == random_string:
                     embed.title = "Time is up!"
-                    embed.description = f"<@{player_id}>, you have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[player_id]['score']}\n{progress}\n\nPlay again with `;p` or `;play`"
+                    embed.description = f"You have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[player_id]['score']}\n{progress}\n<@{player_id}>"
+                    embed.set_footer(text="Play again with ;p or ;play")
                     await challenge.edit(embed=embed)
                     await save_game(player_id, message.guild.id, captchas[player_id]['score'])
                     delete_captcha(random_string)
@@ -406,8 +415,9 @@ async def on_message(message):
                     progress = ""
                 embed = discord.Embed(
                     title="Wrong Answer",
-                    description=f"<@{player_id}>, you have lost.\nThe correct answer was **{answer}**.\n\n**Final Score:** {captchas[player_id]['score']}\n{progress}\n\nPlay again with `;p` or `;play`",
+                    description=f"You have lost.\nThe correct answer was **{answer}**.\n\n**Final Score:** {captchas[player_id]['score']}\n{progress}\n<@{player_id}>",
                 )
+                embed.set_footer(text="Play again with ;p or ;play")
                 await message.channel.send(embed=embed)
                 await save_game(player_id, message.guild.id, captchas[player_id]['score'])
                 delete_captcha(answer)
