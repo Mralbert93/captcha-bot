@@ -176,7 +176,7 @@ async def stats(ctx):
         color=discord.Color.purple()
     )
     embed.set_thumbnail(url=bot.user.avatar.url)
-    embed.set_footer("Leaderboards updated hourly here: https://discord.gg/gkpxVhMZqP") 
+    embed.set_footer(text="Leaderboards updated hourly here: https://discord.gg/gkpxVhMZqP") 
     await ctx.send(embed=embed)
 
     embed2 = discord.Embed(
@@ -185,7 +185,7 @@ async def stats(ctx):
         color=discord.Color.purple()
     )
     embed2.set_thumbnail(url=bot.user.avatar.url)
-    embed2.set_footer("Leaderboards updated hourly here: https://discord.gg/gkpxVhMZqP") 
+    embed2.set_footer(text="Leaderboards updated hourly here: https://discord.gg/gkpxVhMZqP") 
     await ctx.send(embed=embed2)
 
     embed3 = discord.Embed(
@@ -194,7 +194,7 @@ async def stats(ctx):
         color=discord.Color.purple()
     )
     embed3.set_thumbnail(url=bot.user.avatar.url)
-    embed3.set_footer("Leaderboards updated hourly here: https://discord.gg/gkpxVhMZqP") 
+    embed3.set_footer(text="Leaderboards updated hourly here: https://discord.gg/gkpxVhMZqP") 
     await ctx.send(embed=embed3)
 
 @bot.command(name='statistics', aliases=['stats'])
