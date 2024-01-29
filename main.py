@@ -401,7 +401,6 @@ async def on_message(message):
                 if captchas.get(player_id, {}).get('captcha_string') == random_string:
                     embed.title = "Time is up!"
                     embed.description = f"You have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[player_id]['score']}\n{progress}\n\n<@{player_id}>"
-                    embed.set_color(discord.Color.purple())
                     embed.set_footer(text="Play again with ;p or ;play")
                     await challenge.edit(embed=embed)
                     await save_game(player_id, message.guild.id, captchas[player_id]['score'])
@@ -483,7 +482,6 @@ async def skip(ctx):
             embed.title = "Time is up!"
             embed.description = f"You have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[player_id]['score']}\n{progress}\n\n<@{player_id}>"
             embed.set_footer(text="Play again with ;p or ;play")
-            embed.set_color(discord.Color.purple())
             await challenge.edit(embed=embed)
             await save_game(player_id, ctx.message.guild.id, captchas[player_id]['score'])
             delete_captcha(random_string)
