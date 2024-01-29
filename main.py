@@ -96,6 +96,7 @@ async def on_ready():
     grandmaster = discord.utils.get(guild.roles, id=1201494061522092092)
     overlord = discord.utils.get(guild.roles, id=1201494156950909010)
 
+    global role_thresholds
     role_thresholds = {
         novice: 10,
         apprentice: 25,
