@@ -93,13 +93,15 @@ async def check_roles(player_id):
 async def on_ready():
     print(f'{bot.user} has connected to Discord!')
 
-    novice = discord.utils.get(ctx.guild.roles, id=1201493503096651816)
-    apprentice = discord.utils.get(ctx.guild.roles, id=1201493685775368272)
-    explorer = discord.utils.get(ctx.guild.roles, id=1201493818005016576)
-    enthusiast = discord.utils.get(ctx.guild.roles, id=1201493908400648273)
-    master = discord.utils.get(ctx.guild.roles, id=1201493975249465384)
-    grandmaster = discord.utils.get(ctx.guild.roles, id=1201494061522092092)
-    overlord = discord.utils.get(ctx.guild.roles, id=1201494156950909010)
+    guild = bot.get_guild(1201163257461866596)
+    
+    novice = discord.utils.get(guild.roles, id=1201493503096651816)
+    apprentice = discord.utils.get(guild.roles, id=1201493685775368272)
+    explorer = discord.utils.get(guild.roles, id=1201493818005016576)
+    enthusiast = discord.utils.get(guild.roles, id=1201493908400648273)
+    master = discord.utils.get(guild.roles, id=1201493975249465384)
+    grandmaster = discord.utils.get(guild.roles, id=1201494061522092092)
+    overlord = discord.utils.get(guild.roles, id=1201494156950909010)
 
     while True:
             games_count = await get_games_count()
