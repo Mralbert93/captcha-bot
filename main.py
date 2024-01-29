@@ -368,7 +368,7 @@ async def play(ctx):
         await ctx.send("<@{ctx.author.mention}>, you must be playing a game to use a skip.")
         return
 
-    skips = get_skips(player_id)
+    skips = await int(get_skips(player_id))
     if skips > 0:
         players.update_one({"_id": player_id}, {"$inc": {"skips": -1}})
         
