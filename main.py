@@ -423,11 +423,17 @@ async def skip(ctx):
     try:
         captcha_info = captchas.get(player_id)
     except Exception as e:
-        await ctx.send("<@{ctx.author.mention}>, you must be playing a game to use a skip.")
         return
 
     if captcha_info is None:
-        await ctx.send("<@{ctx.author.mention}>, you must be playing a game to use a skip.")
+        await ctx.send(f"<@{ctx.author.mention}>, you must be playing a game to use a skip.")
+        embed = discord.Embed(
+            title="Skip Failure",
+            description=f"You must be playing a game to use a skip.\n\n<@{ctx.author.mention}>",
+            color=discord.Color.red()
+        )
+        embed.set_thumbnail(url="https://i.ibb.co/tptVTTH/toppng-com-red-x-in-circle-x-ico-2000x2000-removebg-preview.png")
+        await ctx.send(embed=embed)
         return
 
     skips = await get_skips(player_id)
