@@ -1,5 +1,4 @@
 import random
-import random
 import string
 from io import BytesIO
 from captcha.image import ImageCaptcha
