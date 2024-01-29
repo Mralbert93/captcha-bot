@@ -78,6 +78,7 @@ async def check_roles(player_id):
         if role is not None and role not in player.roles and top_score >= threshold:
             new_roles.append(role.name)
             player.add_roles(role)
+            print(f"{role.name} added for {player_id}")
     return new_roles
 
 @bot.event
