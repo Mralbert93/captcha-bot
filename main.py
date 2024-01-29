@@ -71,7 +71,7 @@ class CustomHelpCommand(commands.HelpCommand):
         ctx = self.context
         embed = discord.Embed(
             title="Help",
-            description="<@1200756820403306586> is a Captcha solving game.\nAnswer the captcha correctly in alloted time or you lose!\n\n-----\n\n`;play` - starts a game\n\n-----\n\n`statistics` - shows player statistics\n\n-----\n\n`leaderboard` - shows global leaderboards\n\nContact <@838472003031793684> for support or data deletion requests.",
+            description="<@1200756820403306586> is a Captcha solving game.\nAnswer the captcha correctly in alloted time or you lose!\n\n-----\n\n`;play` - starts a game\n\n-----\n\n`;skip` - skips the captcha\n\n-----\n\n`coins` - shows your coin balance\n\n----\n\n`buy x` - buys the a specified amount of skips\n\n-----`statistics` - shows player statistics\n\n-----\n\n`leaderboard` - shows global leaderboards\n\n-----\n\n`;vote` - vote to receive rewards\n\nContact <@838472003031793684> for support or data deletion requests.",
             color=discord.Color.purple()
         )
         await ctx.send(embed=embed)
