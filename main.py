@@ -300,7 +300,7 @@ async def on_message(message):
             await user.send(embed=embed) 
             return
         
-    if message.content != ";p" and message.content != ";play" and message.content != ";s" and message.content != ";skip":
+    if message.content != ";p" and message.content != ";play" and message.content != ";s" and message.content != ";skip" and message.content != ";v" and message.content != ";vote":
 
         try:
             captcha_info = captchas.get(player_id)
@@ -360,7 +360,7 @@ async def on_message(message):
     await bot.process_commands(message)
 
 @bot.command(name='skip', aliases=['s'])
-async def play(ctx):
+async def skip(ctx):
     player_id = ctx.message.author.id
     try:
         captcha_info = captchas.get(player_id)
@@ -407,7 +407,12 @@ async def play(ctx):
             delete_captcha(random_string)
             del captchas[player_id]
     else:
-        await ctx.send(f"{ctx.author.mention}, you have no skips left. You can get more skips from `;shop` or `;vote.`")
+        await ctx.send(f"{ctx.author.mention}, you have no skips left. You can get more skips from `;buy skips` or `;vote`.")
         return
+
+@bot.command(name='vote', aliases=['v'])
+async def vote(ctx):
+    await ctx.send(f"{ctx.author.mention}, you can vote every 12 hours for the bot using the link below:\n\nhttps://top.gg/bot/1200756820403306586/vote\n\nAfter voting, you will be automatically rewarded **10 skips**.")
+    return
     
 bot.run(token)
