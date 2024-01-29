@@ -68,8 +68,7 @@ async def get_skips(player_id):
 
 async def check_roles(player_id):
     guild = bot.get_guild(1201163257461866596)
-    print(player_id)
-    player = guild.get_member(player_id)
+    player = guild.get_member(int(player_id))
 
     global novice, apprentice, explorer, enthusiast, master, grandmaster, overlord, role_thresholds
     
