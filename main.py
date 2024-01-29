@@ -383,13 +383,13 @@ async def play(ctx):
                 
         score = captchas[player_id]['score']
         progress = "🔥" * (int(score/5)+1)
-        progress += "\n\n"
+        progress += "\n"
         if score == 0:
             progress = ""
                 
         embed = discord.Embed(
             title='Solve the Captcha below',
-            description=f"<@{ctx.message.author.id}>, you have chosen to skip.\nYou have {skips-1} skips left.\n\n**Score:** {score}\n{progress}Time is up <t:{get_countdown()}:R>",
+            description=f"<@{ctx.message.author.id}>, you have chosen to skip.\nYou have {skips-1} skips left.\n\n**Score:** {score}\n{progress}\nTime is up <t:{get_countdown()}:R>",
         )
         embed.set_image(url=f"attachment://{random_string}.png")
 
