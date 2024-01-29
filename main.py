@@ -456,7 +456,8 @@ async def skip(ctx):
                 
         embed = discord.Embed(
             title='Solve the Captcha below',
-            description=f"<@{ctx.message.author.id}>, you have chosen to skip.\nYou have {skips-1} skips left.\n\n**Score:** {score}\n{progress}\nTime is up <t:{get_countdown()}:R>",
+            description=f"You have chosen to skip.\nYou have **{skips-1} skips** left.\n\n**Score:** {score}\n{progress}\nTime is up <t:{get_countdown()}:R>\n\n<@{ctx.message.author.id}>",
+            color=discord.Color.purple()
         )
         embed.set_image(url=f"attachment://{random_string}.png")
 
@@ -468,7 +469,7 @@ async def skip(ctx):
         await asyncio.sleep(10)
         if captchas.get(player_id, {}).get('captcha_string') == random_string:
             embed.title = "Time is up!"
-            embed.description = f"<@{player_id}>, you have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[player_id]['score']}\n{progress}\n\nPlay again with `;p` or `;play`"
+            embed.description = f"You have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[player_id]['score']}\n{progress}\n\nPlay again with `;p` or `;play`\n\n<@{player_id}>"
             await challenge.edit(embed=embed)
             await save_game(player_id, ctx.message.guild.id, captchas[player_id]['score'])
             delete_captcha(random_string)
@@ -476,7 +477,13 @@ async def skip(ctx):
                 new_roles = await check_roles(player_id, captchas[player_id]['score'], ctx.message.channel)
             del captchas[player_id]
     else:
-        await ctx.send(f"You have no skips left. You can get more skips from `;buy skips` or `;vote`.\n{ctx.author.mention}")
+        embed = discord.Embed(
+            title="Skip Failure",
+            description=f"You have no skips left. You can get more skips from `;buy skips` or `;vote`.\n{ctx.author.mention}",
+            color=discord.Color.red()
+        )
+        embed.set_thumbnail(url="https://i.ibb.co/tptVTTH/toppng-com-red-x-in-circle-x-ico-2000x2000-removebg-preview.png")
+        await ctx.send(embed=embed)
         return
 
 @bot.command(name='vote', aliases=['v'])
