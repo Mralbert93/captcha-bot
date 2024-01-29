@@ -140,7 +140,7 @@ async def stats(ctx):
     for i, result in enumerate(top_10_most_games, 1):
         player_id = result["_id"]["player_id"]
         total_games = result["total_games"]
-        most_games_string += f"{i}. <@{player_id}> ({total_games} games)\n"
+        most_games_string += f"{i}. <@{player_id}> - {total_games} games\n"
 
     most_sum_query = [
         {"$unwind": "$games"},
@@ -154,7 +154,7 @@ async def stats(ctx):
     for i, result in enumerate(top_10_sum_scores, 1):
         player_id = result["_id"]["player_id"]
         total_score = result["total_score"]
-        most_sum_scores_string += f"{i}. <@{player_id}> ({total_score})\n"
+        most_sum_scores_string += f"{i}. <@{player_id}> - {total_score}\n"
 
     high_score_query = [
         {"$unwind": "$games"},
@@ -168,30 +168,33 @@ async def stats(ctx):
     for i, result in enumerate(top_10_high_scores, 1):
         player_id = result["_id"]["player_id"]
         high_score = result["high_score"]
-        top_high_score_string += f"{i}. <@{player_id}> ({high_score})\n"
+        top_high_score_string += f"{i}. <@{player_id}> - {high_score}\n"
 
     embed = discord.Embed(
-        title='Leaderboard - Most Games Played',
-        description=f"{most_games_string}",
+        title='Leaderboard - High Score',
+        description=f"{top_high_score_string}",
         color=discord.Color.purple()
     )
     embed.set_thumbnail(url=bot.user.avatar.url)
+    embed.set_footer("Leaderboards updated hourly here: https://discord.gg/gkpxVhMZqP") 
     await ctx.send(embed=embed)
 
     embed2 = discord.Embed(
-        title='Leaderboard - Highest Total Score',
+        title='Leaderboard - Total Score',
         description=f"{most_sum_scores_string}",
         color=discord.Color.purple()
     )
     embed2.set_thumbnail(url=bot.user.avatar.url)
+    embed2.set_footer("Leaderboards updated hourly here: https://discord.gg/gkpxVhMZqP") 
     await ctx.send(embed=embed2)
 
     embed3 = discord.Embed(
-        title='Leaderboard - Highest Game Score',
-        description=f"{top_high_score_string}",
+        title='Leaderboard - Games Played',
+        description=f"{most_games_string}",
         color=discord.Color.purple()
     )
     embed3.set_thumbnail(url=bot.user.avatar.url)
+    embed3.set_footer("Leaderboards updated hourly here: https://discord.gg/gkpxVhMZqP") 
     await ctx.send(embed=embed3)
 
 @bot.command(name='statistics', aliases=['stats'])
