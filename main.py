@@ -447,9 +447,9 @@ async def coins(ctx):
         return
 
 @bot.command(name='buy', aliases=['b'])
-async def buy(ctx, quantity: int):
+async def buy(ctx, quantity: int = 0):
     if quantity is None or quantity < 1:
-        await ctx.send(f"{ctx.message.author.mention}, please specify the amount of skips you want to buy for 100 each (i.e., `;buy 10`).")
+        await ctx.send(f"{ctx.message.author.mention}, please specify the amount of skips you want to buy for 100 coins :coin: each (i.e., `;buy 10`).")
         return
     else:
         result = players.find_one({'_id': ctx.message.author.id})
