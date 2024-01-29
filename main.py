@@ -61,6 +61,8 @@ async def get_skips(player_id):
 async def check_roles(player_id):
     guild = bot.get_guild(1201163257461866596)
     player = guild.get_member(player_id)
+
+    global novice, apprentice, explorer, enthusiast, master, grandmaster, overlord, role_thresholds
     
     high_score_query = [
         {'$match': {'_id': player_id}},
@@ -108,7 +110,6 @@ async def on_ready():
         overlord: 1000
     }
 
-    print(role_thresholds)
     while True:
             games_count = await get_games_count()
             await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f"{games_count} Captchas"))
