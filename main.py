@@ -496,8 +496,8 @@ async def coins(ctx):
         return
     except Exception as e:
         embed = discord.Embed(
-            title="Coins Balance",
-            description=f"{ctx.author.mention}\n\nYou don't have any :coin: coins.\nStart playing to get some!",
+            title="Coin Balance",
+            description=f"You don't have any :coin: coins.\nStart playing to get some!\n\n{ctx.author.mention}",
             color=discord.Color.purple()
         )
         embed.set_thumbnail(url=ctx.message.author.avatar.url)
