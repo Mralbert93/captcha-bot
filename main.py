@@ -414,7 +414,13 @@ async def skip(ctx):
 
 @bot.command(name='vote', aliases=['v'])
 async def vote(ctx):
-    await ctx.send(f"{ctx.author.mention}, you can vote every 12 hours for the bot using the link below:\n\nhttps://top.gg/bot/1200756820403306586/vote\n\nAfter voting, you will be automatically rewarded **10 skips**.")
+    embed = discord.Embed(
+            title="Coins Balance",
+            description=f"{ctx.author.mention}, you can vote every 12 hours for the bot using the link below:\n\nhttps://top.gg/bot/1200756820403306586/vote\n\nAfter voting, you will be automatically rewarded **10 skips**.",
+            color=discord.Color.purple()
+        )
+    embed.set_thumbnail(url="https://cdn.discordapp.com/avatars/422087909634736160/d41e1166aadbba1fd62f6c43e2a15777.png")
+    await ctx.send(embed=embed)
     return
 
 @bot.command(name='coins', aliases=['c'])
@@ -422,10 +428,22 @@ async def coins(ctx):
     result = players.find_one({'_id': ctx.message.author.id})
     try:
         coins = result["coins"]
-        await ctx.send(f"{ctx.author.mention}, you have **{coins} coins** :coin:. Keep playing to get more!")
+        embed = discord.Embed(
+            title="Coins Balance",
+            description=f"{ctx.author.mention}, you have **{coins} coins** :coin:.\nKeep playing to get more!",
+            color=discord.Color.purple()
+        )
+        embed.set_thumbnail(url=ctx.message.author.avatar.url)
+        await ctx.send(embed=embed)
         return
     except Exception as e:
-        await ctx.send(f"{ctx.author.mention}, you don't have any coins. Start playing to get some!")
+        embed = discord.Embed(
+            title="Coins Balance",
+            description=f"{ctx.author.mention}, you don't have any coins.\nStart playing to get some!",
+            color=discord.Color.purple()
+        )
+        embed.set_thumbnail(url=ctx.message.author.avatar.url)
+        await ctx.send(embed=embed)
         return
     
 bot.run(token)
