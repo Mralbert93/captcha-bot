@@ -468,7 +468,7 @@ async def buy(ctx, quantity: int = 0):
             else:
                 embed = discord.Embed(
                     title="Skip Purchase Failure",
-                    description=f"{ctx.author.mention}, you don't have enough coins.\nYou need {1000*quantity} :coin: coins.\nYou only have {coins} :coin: coins.",
+                    description=f"{ctx.author.mention}, you don't have enough coins.\n\nYou need {1000*quantity} :coin: coins.\nYou have {coins} :coin: coins.",
                     color=discord.Color.red()
                 )
                 embed.set_thumbnail(url=ctx.message.author.avatar.url)
