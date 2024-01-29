@@ -67,6 +67,7 @@ async def get_skips(player_id):
 
 async def check_roles(player_id):
     guild = bot.get_guild(1201163257461866596)
+    print(guild)
     player = guild.get_member(player_id)
     print(player)
 
