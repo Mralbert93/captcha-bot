@@ -311,7 +311,7 @@ async def on_message(message):
             guess = message.content
             answer = captcha_info['captcha_string']
 
-            if message.content == captcha_info['captcha_string']:
+            if message.content.lower() == captcha_info['captcha_string'].lower():
                 captchas[player_id]['score'] += 1
                 captchas[player_id]['captcha_string'] = ""
                 delete_captcha(answer)
