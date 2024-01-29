@@ -32,9 +32,9 @@ async def save_game(player_id, guild_id, score):
 
     player = players.find_one({'_id': player_id})
     if player is None:
-         players.insert_one({'_id': player_id, 'games': [game], 'coins': score})
+         players.insert_one({'_id': player_id, 'games': [game], 'coins': score*10})
     else:
-        players.update_one({'_id': player_id}, {'$push': {'games': game}, "$inc": {"coins": score}}, upsert=True)
+        players.update_one({'_id': player_id}, {'$push': {'games': game}, "$inc": {"coins": score*10}}, upsert=True)
     return
 
 async def get_games_count():
@@ -416,5 +416,15 @@ async def skip(ctx):
 async def vote(ctx):
     await ctx.send(f"{ctx.author.mention}, you can vote every 12 hours for the bot using the link below:\n\nhttps://top.gg/bot/1200756820403306586/vote\n\nAfter voting, you will be automatically rewarded **10 skips**.")
     return
+
+@bot.command(name='coins', aliases=['c'])
+async def coins(ctx):
+    coins = players.find_one({'_id': ctx.message.author.id})[0]['coins]
+    if coins:
+        await ctx.send(f"{ctx.author.mention}, you have {coins}. Keep playing to get more!")
+        return
+    else:
+        await ctx.send(f"{ctx.author.mention}, you don't have any {coins}. Start playing to get some!")
+        return
     
 bot.run(token)
