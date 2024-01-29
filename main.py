@@ -79,7 +79,7 @@ async def check_roles(player_id, score, channel):
                 description=f"<@{player_id}>\n\nCongratulations!\nYou earned the **{role.name}** role by scoring more than {threshold}!",
                 color=discord.Color.purple()
             )
-            embed.set_thumbnail(url=bot.user.avatar.url)
+            embed.set_thumbnail(url=player.avatar.url)
             await channel.send(embed=embed)
     return new_roles
 
