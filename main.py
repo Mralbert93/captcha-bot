@@ -75,7 +75,7 @@ async def check_roles(player_id):
 
     new_roles = {}
     for role, threshold in role_thresholds.items():
-        if role is not None and role not in player.roles and top_score >= threshold:
+        if role not in player.roles and top_score >= threshold:
             new_roles.append(role.name)
             player.add_roles(role)
             print(f"{role.name} added for {player_id}")
