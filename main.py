@@ -80,7 +80,7 @@ async def check_roles(player_id, score):
                 color=discord.Color.purple()
             )
             embed.set_thumbnail(url=bot.user.avatar.url)
-            await ctx.send(embed=embed)
+            await player.send(embed=embed)
     return new_roles
 
 @bot.event
