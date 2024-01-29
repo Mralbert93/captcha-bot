@@ -369,11 +369,11 @@ async def play(ctx):
         return
 
     skips = await get_skips(player_id)
-    print(skips)
     if skips > 0:
         players.update_one({"_id": player_id}, {"$inc": {"skips": -1}})
         
         captcha_info = captchas.get(player_id)
+        answer = captcha_info['captcha_string']
         captchas[player_id]['captcha_string'] = ""
         delete_captcha(answer)
 
