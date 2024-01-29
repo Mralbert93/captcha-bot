@@ -34,7 +34,7 @@ async def save_game(player_id, guild_id, score):
     if player is None:
          players.insert_one({'_id': player_id, 'games': [game], 'coins': score})
     else:
-        players.update_one({'_id': player_id}, {'$push': {'games': game}}, {"$inc": {"coins": score}}, upsert=True)
+        players.update_one({'_id': player_id}, {'$push': {'games': game}, "$inc": {"coins": score}}, upsert=True)
     return
 
 async def get_games_count():
