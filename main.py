@@ -300,7 +300,7 @@ async def on_message(message):
             await user.send(embed=embed) 
             return
         
-    if message.content != ";p" and message.content != ";play":
+    if message.content != ";p" and message.content != ";play" and message.content != ";s" and message.content != ";skip":
 
         try:
             captcha_info = captchas.get(player_id)
