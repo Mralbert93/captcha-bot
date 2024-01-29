@@ -445,5 +445,43 @@ async def coins(ctx):
         embed.set_thumbnail(url=ctx.message.author.avatar.url)
         await ctx.send(embed=embed)
         return
-    
+
+@bot.command(name='buy', aliases=['b'])
+async def buy(ctx, quantity: int):
+    if quantity is None or quantity < 1:
+        await ctx.send(f"{ctx.message.author.mention}, please specify the amount of skips you want to buy for 100 each (i.e., `;buy 10`).")
+        return
+    else:
+        result = players.find_one({'_id': ctx.message.author.id})
+        try:
+            coins = result["coins"]
+            if coins > (quantity*1000):
+                players.update_one( {"_id": ctx.message.author.id}, "$inc": {"coins": -1000*quantity, "skips": quantity})
+                embed = discord.Embed(
+                    title="Skips Purchased",
+                    description=f"{ctx.author.mention}, you have bought {quantity} skips for {1000*quantity} coins :coin:.\nYou have {(coins-(quantity*1000)) coins :coin: left.",
+                    color=discord.Color.purple()
+                )
+                embed.set_thumbnail(url=ctx.message.author.avatar.url)
+                await ctx.send(embed=embed)
+                return
+            else:
+                embed = discord.Embed(
+                    title="Skip Purchase Failure",
+                    description=f"{ctx.author.mention}, you don't have enough coins.\nYou need {1000*quantity} coins :coin: but you only have {coins} coins :coin left.",
+                    color=discord.Color.red()
+                )
+                embed.set_thumbnail(url=ctx.message.author.avatar.url)
+                await ctx.send(embed=embed)
+                return
+        except Exception as e:
+            embed = discord.Embed(
+                title="Skip Purchase Failure",
+                description=f"{ctx.author.mention}, you don't have any coins to buy skips.\nStart playing to get some!",
+                color=discord.Color.red()
+            )
+            embed.set_thumbnail(url=ctx.message.author.avatar.url)
+            await ctx.send(embed=embed)
+            return
+                             
 bot.run(token)
