@@ -74,6 +74,7 @@ async def check_roles(player_id):
     top_score = list(players.aggregate(high_score_query))[0]['top_score']
 
     new_roles = {}
+    print(role_thesholds.items())
     for role, threshold in role_thresholds.items():
         if role not in player.roles and top_score >= threshold:
             new_roles.append(role.name)
