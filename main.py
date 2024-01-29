@@ -86,8 +86,7 @@ async def check_roles(player_id):
     for role, threshold in role_thresholds.items():
         if role not in player.roles and top_score >= threshold:
             new_roles.append(role.name)
-            player.add_roles(role)
-            print(f"{role.name} added for {player_id}")
+            await player.add_roles(role)
     return new_roles
 
 @bot.event
@@ -400,7 +399,8 @@ async def on_message(message):
                     await save_game(player_id, message.guild.id, captchas[player_id]['score'])
                     delete_captcha(random_string)
                     del captchas[player_id]
-                    await check_roles(player_id)
+                    if message.guild.id == 1201163257461866596:
+                        await check_roles(player_id)
             else:
                 score = captchas[player_id]['score']
                 progress = "🔥" * (int(score/5)+1)
@@ -465,7 +465,8 @@ async def skip(ctx):
             await save_game(player_id, ctx.message.guild.id, captchas[player_id]['score'])
             delete_captcha(random_string)
             del captchas[player_id]
-            await check_roles(player_id)
+            if message.guild.id == 1201163257461866596:
+                await check_roles(player_id)
     else:
         await ctx.send(f"You have no skips left. You can get more skips from `;buy skips` or `;vote`.\n{ctx.author.mention}")
         return
