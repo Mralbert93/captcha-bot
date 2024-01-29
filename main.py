@@ -421,10 +421,10 @@ async def vote(ctx):
 async def coins(ctx):
     coins = players.find_one({'_id': ctx.message.author.id})['coins']
     if coins:
-        await ctx.send(f"{ctx.author.mention}, you have {coins}. Keep playing to get more!")
+        await ctx.send(f"{ctx.author.mention}, you have **{coins}** :coin:. Keep playing to get more!")
         return
     else:
-        await ctx.send(f"{ctx.author.mention}, you don't have any {coins}. Start playing to get some!")
+        await ctx.send(f"{ctx.author.mention}, you don't have any coins. Start playing to get some!")
         return
     
 bot.run(token)
