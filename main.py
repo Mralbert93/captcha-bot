@@ -18,6 +18,13 @@ players = db["players"]
 
 captchas = {}
 role_thresholds = None
+novice = None
+apprentice = None
+explorer = None 
+enthusiast = None 
+master = None
+grandmaster = None
+overlord = None 
 
 intents = discord.Intents.default()
 intents.message_content = True
