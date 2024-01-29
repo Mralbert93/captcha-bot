@@ -430,7 +430,7 @@ async def coins(ctx):
         coins = result["coins"]
         embed = discord.Embed(
             title="Coins Balance",
-            description=f"{ctx.author.mention}, you have **{coins} coins** :coin:.\nKeep playing to get more!",
+            description=f"{ctx.author.mention}, you have **{coins} :coin: coins**.\nKeep playing to get more!",
             color=discord.Color.purple()
         )
         embed.set_thumbnail(url=ctx.message.author.avatar.url)
@@ -439,7 +439,7 @@ async def coins(ctx):
     except Exception as e:
         embed = discord.Embed(
             title="Coins Balance",
-            description=f"{ctx.author.mention}, you don't have any coins.\nStart playing to get some!",
+            description=f"{ctx.author.mention}, you don't have any :coin: coins.\nStart playing to get some!",
             color=discord.Color.purple()
         )
         embed.set_thumbnail(url=ctx.message.author.avatar.url)
@@ -468,7 +468,7 @@ async def buy(ctx, quantity: int = 0):
             else:
                 embed = discord.Embed(
                     title="Skip Purchase Failure",
-                    description=f"{ctx.author.mention}, you don't have enough coins.\nYou need {1000*quantity} :coin: coins,but you only have {coins} coins :coin: left.",
+                    description=f"{ctx.author.mention}, you don't have enough coins.\nYou need {1000*quantity} :coin: coins.\nYou only have {coins} :coin: coins.",
                     color=discord.Color.red()
                 )
                 embed.set_thumbnail(url=ctx.message.author.avatar.url)
