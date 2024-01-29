@@ -65,28 +65,16 @@ async def get_skips(player_id):
     else:
         return player_object.get("skips")
 
-async def check_roles(player_id):
+async def check_roles(player_id, score):
     guild = bot.get_guild(1201163257461866596)
     player = await guild.fetch_member(player_id)
-
-    global novice, apprentice, explorer, enthusiast, master, grandmaster, overlord, role_thresholds
     
-    high_score_query = [
-        {'$match': {'_id': player_id}},
-        {'$unwind': '$games'},
-        {'$group': {
-            '_id': '$_id',
-            'top_score': {'$max': '$games.score'}
-        }},
-        {'$project': {'_id': 0, 'top_score': 1}}
-    ]
-    top_score = list(players.aggregate(high_score_query))[0]['top_score']
-
     new_roles = []
     for role, threshold in role_thresholds.items():
-        if role not in player.roles and top_score >= threshold:
+        if role not in player.roles and score >= threshold:
             new_roles.append(role.name)
             await player.add_roles(role)
+            await player.send(f"Congratulations on achieving the **{role.name}** role!")
     return new_roles
 
 @bot.event
@@ -398,9 +386,9 @@ async def on_message(message):
                     await challenge.edit(embed=embed)
                     await save_game(player_id, message.guild.id, captchas[player_id]['score'])
                     delete_captcha(random_string)
-                    del captchas[player_id]
                     if message.guild.id == 1201163257461866596:
-                        await check_roles(player_id)
+                        await check_roles(player_id, captchas[player_id]['score'])
+                    del captchas[player_id]
             else:
                 score = captchas[player_id]['score']
                 progress = "🔥" * (int(score/5)+1)
@@ -464,9 +452,9 @@ async def skip(ctx):
             await challenge.edit(embed=embed)
             await save_game(player_id, ctx.message.guild.id, captchas[player_id]['score'])
             delete_captcha(random_string)
-            del captchas[player_id]
             if message.guild.id == 1201163257461866596:
-                await check_roles(player_id)
+                new_roles = await check_roles(player_id, captchas[player_id]['score'] )
+            del captchas[player_id]
     else:
         await ctx.send(f"You have no skips left. You can get more skips from `;buy skips` or `;vote`.\n{ctx.author.mention}")
         return
