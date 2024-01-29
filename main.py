@@ -17,13 +17,7 @@ db = mongo.captcha
 players = db["players"]
 
 captchas = {}
-global novice
-global aprentice
-global explorer
-global enthusiast
-global master
-global grandmaster
-global overlord
+role_thresholds = {}
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -79,16 +73,6 @@ async def check_roles(player_id):
     ]
     top_score = list(players.aggregate(high_score_query))[0]['top_score']
 
-    role_thresholds = {
-        novice: 10,
-        apprentice: 25,
-        explorer: 50,
-        enthusiast: 100,
-        master: 250,
-        grandmaster: 500,
-        overlord: 1000
-    }
-
     new_roles = {}
     for role, threshold in role_thresholds.items():
         if role is not None and role not in player.roles and top_score >= threshold:
@@ -109,6 +93,16 @@ async def on_ready():
     master = discord.utils.get(guild.roles, id=1201493975249465384)
     grandmaster = discord.utils.get(guild.roles, id=1201494061522092092)
     overlord = discord.utils.get(guild.roles, id=1201494156950909010)
+
+    role_thresholds = {
+        novice: 10,
+        apprentice: 25,
+        explorer: 50,
+        enthusiast: 100,
+        master: 250,
+        grandmaster: 500,
+        overlord: 1000
+    }
 
     while True:
             games_count = await get_games_count()
