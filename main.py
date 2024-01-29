@@ -407,8 +407,9 @@ async def on_message(message):
                 await message.channel.send(embed=embed)
                 await save_game(player_id, message.guild.id, captchas[player_id]['score'])
                 delete_captcha(answer)
+                if message.guild.id == 1201163257461866596:
+                    await check_roles(player_id, captchas[player_id]['score'])
                 del captchas[player_id]
-                await check_roles(player_id)
                 
     await bot.process_commands(message)
 
