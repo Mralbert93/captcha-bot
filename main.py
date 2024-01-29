@@ -427,6 +427,7 @@ async def skip(ctx):
         return
 
     if captcha_info is None:
+        await ctx.send("<@{ctx.author.mention}>, you must be playing a game to use a skip.")
         return
 
     skips = await get_skips(player_id)
