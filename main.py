@@ -407,7 +407,7 @@ async def play(ctx):
             delete_captcha(random_string)
             del captchas[player_id]
     else:
-        await ctx.send("<@{ctx.author.mention}>, you have no skips left. You can get more skips from `;shop` or `;vote.`")
+        await ctx.send(f"<@{ctx.author.mention}>, you have no skips left. You can get more skips from `;shop` or `;vote.`")
         return
     
 bot.run(token)
