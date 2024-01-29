@@ -65,7 +65,7 @@ async def get_skips(player_id):
     else:
         return player_object.get("skips")
 
-async def check_roles(player_id, score):
+async def check_roles(player_id, score, channel):
     guild = bot.get_guild(1201163257461866596)
     player = await guild.fetch_member(player_id)
     
@@ -76,11 +76,11 @@ async def check_roles(player_id, score):
             await player.add_roles(role)
             embed = discord.Embed(
                 title="New Title Achieved",
-                description=f"Congratulations! You have received the **{role.name}** role by scoring more than {threshold}!",
+                description=f"<@{player_id}>\n\nCongratulations! You have received the **{role.name}** role by scoring more than {threshold}!",
                 color=discord.Color.purple()
             )
             embed.set_thumbnail(url=bot.user.avatar.url)
-            await player.send(embed=embed)
+            await channel.send(embed=embed)
     return new_roles
 
 @bot.event
@@ -393,7 +393,7 @@ async def on_message(message):
                     await save_game(player_id, message.guild.id, captchas[player_id]['score'])
                     delete_captcha(random_string)
                     if message.guild.id == 1201163257461866596:
-                        await check_roles(player_id, captchas[player_id]['score'])
+                        await check_roles(player_id, captchas[player_id]['score'], message.channel)
                     del captchas[player_id]
             else:
                 score = captchas[player_id]['score']
@@ -408,7 +408,7 @@ async def on_message(message):
                 await save_game(player_id, message.guild.id, captchas[player_id]['score'])
                 delete_captcha(answer)
                 if message.guild.id == 1201163257461866596:
-                    await check_roles(player_id, captchas[player_id]['score'])
+                    await check_roles(player_id, captchas[player_id]['score'], message.channel)
                 del captchas[player_id]
                 
     await bot.process_commands(message)
@@ -460,7 +460,7 @@ async def skip(ctx):
             await save_game(player_id, ctx.message.guild.id, captchas[player_id]['score'])
             delete_captcha(random_string)
             if message.guild.id == 1201163257461866596:
-                new_roles = await check_roles(player_id, captchas[player_id]['score'] )
+                new_roles = await check_roles(player_id, captchas[player_id]['score'], ctx.message.channel)
             del captchas[player_id]
     else:
         await ctx.send(f"You have no skips left. You can get more skips from `;buy skips` or `;vote`.\n{ctx.author.mention}")
