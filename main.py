@@ -57,9 +57,49 @@ async def get_skips(player_id):
     else:
         return player_object.get("skips")
 
+async def check_roles(player_id):
+    guild = bot.get_guild(1201163257461866596)
+    player = guild.get_member(player_id)
+    
+    high_score_query = [
+        {'$match': {'_id': player_id}},
+        {'$unwind': '$games'},
+        {'$group': {
+            '_id': '$_id',
+            'top_score': {'$max': '$games.score'}
+        }},
+        {'$project': {'_id': 0, 'top_score': 1}}
+    ]
+    top_score = list(players.aggregate(high_score_query))['top_score']
+
+    role_thresholds = {
+        novice: 10,
+        apprentice: 25,
+        explorer: 50,
+        enthusiast: 100,
+        master: 250,
+        grandmaster: 500,
+        overlord: 1000
+    }
+
+    new_roles = {}
+    for role, threshold in role_thresholds.items():
+        if role is not None and role not in player.roles and top_score >= threshold:
+            new_roles.append(role.name)
+            player.add_roles(role)
+    return new_roles
+
 @bot.event
 async def on_ready():
     print(f'{bot.user} has connected to Discord!')
+
+    novice = discord.utils.get(ctx.guild.roles, id=1201493503096651816)
+    apprentice = discord.utils.get(ctx.guild.roles, id=1201493685775368272)
+    explorer = discord.utils.get(ctx.guild.roles, id=1201493818005016576)
+    enthusiast = discord.utils.get(ctx.guild.roles, id=1201493908400648273)
+    master = discord.utils.get(ctx.guild.roles, id=1201493975249465384)
+    grandmaster = discord.utils.get(ctx.guild.roles, id=1201494061522092092)
+    overlord = discord.utils.get(ctx.guild.roles, id=1201494156950909010)
 
     while True:
             games_count = await get_games_count()
@@ -300,8 +340,7 @@ async def on_message(message):
             await user.send(embed=embed) 
             return
         
-    if message.content != ";p" and message.content != ";play" and message.content != ";s" and message.content != ";skip" and message.content != ";v" and message.content != ";vote":
-
+    if not message.content.startswith(";"):
         try:
             captcha_info = captchas.get(player_id)
         except Exception as e:
@@ -346,6 +385,7 @@ async def on_message(message):
                     await save_game(player_id, message.guild.id, captchas[player_id]['score'])
                     delete_captcha(random_string)
                     del captchas[player_id]
+                    await check_roles(player_id)
             else:
                 score = captchas[player_id]['score']
                 progress = "🔥" * (int(score/5)+1)
@@ -359,6 +399,8 @@ async def on_message(message):
                 await save_game(player_id, message.guild.id, captchas[player_id]['score'])
                 delete_captcha(answer)
                 del captchas[player_id]
+                await check_roles(player_id)
+                
     await bot.process_commands(message)
 
 @bot.command(name='skip', aliases=['s'])
@@ -408,6 +450,7 @@ async def skip(ctx):
             await save_game(player_id, ctx.message.guild.id, captchas[player_id]['score'])
             delete_captcha(random_string)
             del captchas[player_id]
+            await check_roles(player_id)
     else:
         await ctx.send(f"You have no skips left. You can get more skips from `;buy skips` or `;vote`.\n{ctx.author.mention}")
         return
