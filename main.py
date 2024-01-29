@@ -17,6 +17,13 @@ db = mongo.captcha
 players = db["players"]
 
 captchas = {}
+global novice
+global aprentice
+global explorer
+global enthusiast
+global master
+global grandmaster
+global overlord
 
 intents = discord.Intents.default()
 intents.message_content = True
