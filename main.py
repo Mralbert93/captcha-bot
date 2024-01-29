@@ -473,7 +473,7 @@ async def skip(ctx):
             await challenge.edit(embed=embed)
             await save_game(player_id, ctx.message.guild.id, captchas[player_id]['score'])
             delete_captcha(random_string)
-            if message.guild.id == 1201163257461866596:
+            if ctx.message.guild.id == 1201163257461866596:
                 new_roles = await check_roles(player_id, captchas[player_id]['score'], ctx.message.channel)
             del captchas[player_id]
     else:
