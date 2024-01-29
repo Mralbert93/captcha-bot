@@ -509,10 +509,10 @@ async def buy(ctx, quantity: int = 0):
     if quantity is None or quantity < 1:
         embed = discord.Embed(
             title="Skip Purchase Failure",
-            description=f"{ctx.message.author.mention}\n\nPlease specify the amount of skips you want to buy.\nEach skip costs 1000 :coin: coins.\n\n`;buy 1`",
+            description=f"Please specify the amount of skips you want to buy.\nEach skip costs **1000 :coin: coins**.\n\n`;buy 1`\n\n{ctx.message.author.mention}",
             color=discord.Color.red()
         )
-        embed.set_thumbnail(url="https://i.ibb.co/2SVNYXw/R.gif")
+        embed.set_thumbnail(url="https://i.ibb.co/tptVTTH/toppng-com-red-x-in-circle-x-ico-2000x2000-removebg-preview.png")
         await ctx.send(embed=embed)
         return
     else:
@@ -523,28 +523,28 @@ async def buy(ctx, quantity: int = 0):
                 players.update_one({"_id": ctx.message.author.id}, {"$inc": {"coins": -1000 * quantity, "skips": quantity}})
                 embed = discord.Embed(
                     title="Skips Purchased",
-                    description=f"{ctx.author.mention}\n\nYou have bought {quantity} skips for {1000*quantity} :coin: coins.\nYou have {(coins-(quantity*1000))} :coin: coins left.",
+                    description=f"You have bought {quantity} skips for **{1000*quantity} :coin: coins**.\nYou have **{(coins-(quantity*1000))}** :coin: coins left.\n\n{ctx.author.mention}",
                     color=discord.Color.purple()
                 )
-                embed.set_thumbnail(url=ctx.message.author.avatar.url)
+                embed.set_thumbnail(url="https://i.ibb.co/3kytCr7/2023446-removebg-preview.png")
                 await ctx.send(embed=embed)
                 return
             else:
                 embed = discord.Embed(
                     title="Skip Purchase Failure",
-                    description=f"{ctx.author.mention}\n\nYou don't have enough coins.\n\nYou need {1000*quantity} :coin: coins.\nYou have {coins} :coin: coins.",
+                    description=f"You don't have enough coins.\n\nYou need **{1000*quantity} :coin: coins**.\nYou have **{coins} :coin: coins**.\n\n{ctx.author.mention}",
                     color=discord.Color.red()
                 )
-                embed.set_thumbnail(url=ctx.message.author.avatar.url)
+                embed.set_thumbnail(url="https://i.ibb.co/tptVTTH/toppng-com-red-x-in-circle-x-ico-2000x2000-removebg-preview.png")
                 await ctx.send(embed=embed)
                 return
         except Exception as e:
             embed = discord.Embed(
                 title="Skip Purchase Failure",
-                description=f"{ctx.author.mention}\n\nYou don't have any :coin: coins to buy skips.\nStart playing to get some!",
+                description=f"You don't have any :coin: coins to buy skips.\nStart playing to get some!\n\n{ctx.author.mention}",
                 color=discord.Color.red()
             )
-            embed.set_thumbnail(url=ctx.message.author.avatar.url)
+            embed.set_thumbnail(url="https://i.ibb.co/tptVTTH/toppng-com-red-x-in-circle-x-ico-2000x2000-removebg-preview.png")
             await ctx.send(embed=embed)
             return
                              
