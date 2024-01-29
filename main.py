@@ -419,7 +419,7 @@ async def vote(ctx):
 
 @bot.command(name='coins', aliases=['c'])
 async def coins(ctx):
-    coins = players.find_one({'_id': ctx.message.author.id})[0]['coins]
+    coins = players.find_one({'_id': ctx.message.author.id})[0]['coins']
     if coins:
         await ctx.send(f"{ctx.author.mention}, you have {coins}. Keep playing to get more!")
         return
