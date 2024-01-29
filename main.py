@@ -17,6 +17,7 @@ db = mongo.captcha
 players = db["players"]
 
 captchas = {}
+guilds = None
 role_thresholds = None
 novice = None
 apprentice = None
