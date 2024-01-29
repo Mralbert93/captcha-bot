@@ -507,7 +507,13 @@ async def coins(ctx):
 @bot.command(name='buy', aliases=['b'])
 async def buy(ctx, quantity: int = 0):
     if quantity is None or quantity < 1:
-        await ctx.send(f"{ctx.message.author.mention}\n\nPlease specify the amount of skips you want to buy.\nEach skip costs 1000 :coin: coins.\n\n`;buy 1`")
+        embed = discord.Embed(
+            title="Skip Purchase Failure",
+            description=f"{ctx.message.author.mention}\n\nPlease specify the amount of skips you want to buy.\nEach skip costs 1000 :coin: coins.\n\n`;buy 1`",
+            color=discord.Color.red()
+        )
+        embed.set_thumbnail(url="https://i.ibb.co/2SVNYXw/R.gif")
+        await ctx.send(embed=embed)
         return
     else:
         result = players.find_one({'_id': ctx.message.author.id})
