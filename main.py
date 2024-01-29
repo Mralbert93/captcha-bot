@@ -384,6 +384,8 @@ async def on_message(message):
                     progress = ""
 
                 skips = await get_skips(player_id)
+                if skips is None:
+                    skips = 0
                 
                 embed = discord.Embed(
                     title='Solve the Captcha below',
@@ -464,7 +466,7 @@ async def skip(ctx):
         progress += "\n"
         if score == 0:
             progress = ""
-                
+        
         embed = discord.Embed(
             title='Solve the Captcha below',
             description=f"You have chosen to skip.\nYou have **{skips-1} skips** left.\n\n**Score:** {score}\n{progress}\nTime is up <t:{get_countdown()}:R>\n\n<@{ctx.message.author.id}>",
