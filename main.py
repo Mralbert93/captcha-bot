@@ -278,6 +278,7 @@ async def statistics(ctx):
         embed.add_field(name='Total Score Rank', value=f"#{total_score_player_index}", inline=True)
         embed.add_field(name='High Score Rank', value=f"#{high_score_player_index}", inline=True)
         embed.set_thumbnail(url=ctx.message.author.avatar.url)
+        embed.set_footer(text="Join our Official Server to earn titles based on high scores: https://discord.gg/gkpxVhMZqP") 
         await ctx.send(embed=embed)
     else:
         await ctx.send(f"<@{ctx.message.author.id}>, no game results found. Get playing!")
