@@ -74,7 +74,13 @@ async def check_roles(player_id, score):
         if role not in player.roles and score >= threshold:
             new_roles.append(role.name)
             await player.add_roles(role)
-            await player.send(f"Congratulations on achieving the **{role.name}** role!")
+            embed = discord.Embed(
+                title="New Title Achieved",
+                description=f"Congratulations! You have received the **{role.name}** role by scoring more than {role.threshold}!",
+                color=discord.Color.purple()
+            )
+            embed.set_thumbnail(url=bot.avatar.url)
+            await ctx.send(embed=embed)
     return new_roles
 
 @bot.event
