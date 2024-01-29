@@ -487,8 +487,8 @@ async def coins(ctx):
     try:
         coins = result["coins"]
         embed = discord.Embed(
-            title="Coins Balance",
-            description=f"{ctx.author.mention}\n\nYou have **{coins} :coin: coins**.\nKeep playing to get more!",
+            title="Coin Balance",
+            description=f"You have **{coins} :coin: coins**.\nKeep playing to get more!\n\n{ctx.author.mention}",
             color=discord.Color.purple()
         )
         embed.set_thumbnail(url=ctx.message.author.avatar.url)
