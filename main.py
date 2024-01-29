@@ -17,7 +17,6 @@ db = mongo.captcha
 players = db["players"]
 
 captchas = {}
-guilds = None
 role_thresholds = None
 novice = None
 apprentice = None
@@ -67,8 +66,8 @@ async def get_skips(player_id):
         return player_object.get("skips")
 
 async def check_roles(player_id):
-    guild = bot.get_guild(1201163257461866596)
-    player = guild.fetch_member(player_id)
+    guild = await bot.get_guild(1201163257461866596)
+    player = await guild.fetch_member(player_id)
 
     global novice, apprentice, explorer, enthusiast, master, grandmaster, overlord, role_thresholds
     
