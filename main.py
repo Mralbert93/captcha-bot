@@ -76,7 +76,7 @@ async def check_roles(player_id, score):
             await player.add_roles(role)
             embed = discord.Embed(
                 title="New Title Achieved",
-                description=f"Congratulations! You have received the **{role.name}** role by scoring more than {role.threshold}!",
+                description=f"Congratulations! You have received the **{role.name}** role by scoring more than {threshold}!",
                 color=discord.Color.purple()
             )
             embed.set_thumbnail(url=bot.avatar.url)
