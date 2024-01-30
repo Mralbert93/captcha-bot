@@ -16,6 +16,7 @@ mongo = MongoClient(database_url)
 db = mongo.captcha
 players = db["players"]
 
+guild = None
 captchas = {}
 role_thresholds = None
 novice = None
@@ -38,11 +39,13 @@ async def save_game(player_id, guild_id, score):
         'score': score
     }
 
+    multiplier = await check_for_boost(player_id)
+
     player = players.find_one({'_id': player_id})
     if player is None:
-         players.insert_one({'_id': player_id, 'games': [game], 'coins': score*10})
+         players.insert_one({'_id': player_id, 'games': [game], 'coins': score*10*multiplier})
     else:
-        players.update_one({'_id': player_id}, {'$push': {'games': game}, "$inc": {"coins": score*10}}, upsert=True)
+        players.update_one({'_id': player_id}, {'$push': {'games': game}, "$inc": {"coins": score*10*multiplier}}, upsert=True)
     return
 
 async def get_games_count():
@@ -82,6 +85,17 @@ async def check_roles(player_id, score, channel):
             embed.set_thumbnail(url=player.avatar.url)
             await channel.send(embed=embed)
     return new_roles
+
+async def check_for_boost(player_id):
+    player = guild.get_member(player_id)
+
+    if player is None:
+        return 1
+
+    if player.premium_since is None:
+        return 1
+    else:
+        return 2
 
 async def update_leaderboards(guild):
     lb_channel = guild.get_channel(1201185111815762001)
@@ -182,12 +196,11 @@ async def on_ready():
         overlord: 1000
     }
 
-    await update_leaderboards(guild)
     n = 1
     while True:
         games_count = await get_games_count()
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f"{games_count} Captchas"))
-        if n % 15 == 0:
+        if n % 60 == 0:
             await update_leaderboards(guild)
         n += 1
         await asyncio.sleep(60)
