@@ -449,6 +449,8 @@ async def skip(ctx):
         return
 
     skips = await get_skips(player_id)
+    if skips is None:
+        skips = 0
     if skips > 0:
         players.update_one({"_id": player_id}, {"$inc": {"skips": -1}})
         
