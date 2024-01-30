@@ -87,7 +87,7 @@ async def check_roles(player_id, score, channel):
     return new_roles
 
 async def check_for_boost(player_id):
-    player = guild.get_member(player_id)
+    player = guild.fetch_member(player_id)
 
     if player is None:
         return 1
