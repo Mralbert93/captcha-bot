@@ -114,6 +114,7 @@ async def on_ready():
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f"{games_count} Captchas"))
         await asyncio.sleep(60)
 
+    await asyncio.sleep(15)
     while True:
         lb_channel = guild.get_channel(1201185111815762001)
         
