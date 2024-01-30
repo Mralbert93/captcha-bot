@@ -115,7 +115,7 @@ async def on_ready():
         await asyncio.sleep(60)
 
     while True:
-        lb_channel = bot.get_channel(1201185111815762001)
+        lb_channel = guild.get_channel(1201185111815762001)
         
         most_games_query = [
             {"$unwind": "$games"},
