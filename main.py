@@ -495,7 +495,7 @@ async def skip(ctx):
     else:
         embed = discord.Embed(
             title="Skip Failure",
-            description=f"You have no skips left. You can get more skips from `;buy skips` or `;vote`.\n{ctx.author.mention}",
+            description=f"You have no skips left.\nYou can get more skips from `;buy skips` or `;vote`.\n\n{ctx.author.mention}",
             color=discord.Color.red()
         )
         embed.set_thumbnail(url="https://i.ibb.co/tptVTTH/toppng-com-red-x-in-circle-x-ico-2000x2000-removebg-preview.png")
