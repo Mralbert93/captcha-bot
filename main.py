@@ -187,7 +187,7 @@ async def on_ready():
     while True:
         games_count = await get_games_count()
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f"{games_count} Captchas"))
-        if if n % 15 == 0:
+        if n % 15 == 0:
             await update_leaderboards()
         n += 1
         await asyncio.sleep(60)
