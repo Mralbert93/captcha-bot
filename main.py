@@ -507,7 +507,7 @@ async def on_message(message):
                 progress = "🔥" * (int(score/5)+1)
                 if score == 0:
                     progress = ""
-                await save_game(player_id, message.guild.id, captchas[player_id]['score'])
+                multiplier, coins = await save_game(player_id, message.guild.id, captchas[player_id]['score'])
                 embed = discord.Embed(
                     title="Wrong Answer",
                     description=f"You have lost.\nThe correct answer was **{answer}**.\n\n**Final Score:** {captchas[player_id]['score']}\n{progress}\n\nYou earned **{coins} :coin: coins** ({multiplier}x multiplier).\n\n<@{player_id}>",
