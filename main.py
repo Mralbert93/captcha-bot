@@ -115,11 +115,13 @@ async def on_ready():
         await asyncio.sleep(60)
 
     while True:
+        lb_channel = bot.get_channel(1201185111815762001)
+        
         most_games_query = [
-        {"$unwind": "$games"},
-        {"$group": {"_id": {"player_id": "$_id"}, "total_games": {"$sum": 1}}},
-        {"$sort": {"total_games": -1}},
-        {"$limit": 10}
+            {"$unwind": "$games"},
+            {"$group": {"_id": {"player_id": "$_id"}, "total_games": {"$sum": 1}}},
+            {"$sort": {"total_games": -1}},
+            {"$limit": 10}
         ]
         top_10_most_games = list(players.aggregate(most_games_query))
     
@@ -164,7 +166,7 @@ async def on_ready():
         )
         embed.set_thumbnail(url=bot.user.avatar.url)
         embed.set_footer(text="Leaderboards updated hourly here: https://discord.gg/gkpxVhMZqP") 
-        await ctx.send(embed=embed)
+        await lb_channel.send(embed=embed)
     
         embed2 = discord.Embed(
             title='Leaderboard - Total Score',
@@ -173,7 +175,7 @@ async def on_ready():
         )
         embed2.set_thumbnail(url=bot.user.avatar.url)
         embed2.set_footer(text="Leaderboards updated hourly here: https://discord.gg/gkpxVhMZqP") 
-        await ctx.send(embed=embed2)
+        await lb_channel.send(embed=embed2)
     
         embed3 = discord.Embed(
             title='Leaderboard - Games Played',
@@ -182,9 +184,8 @@ async def on_ready():
         )
         embed3.set_thumbnail(url=bot.user.avatar.url)
         embed3.set_footer(text="Leaderboards updated hourly here: https://discord.gg/gkpxVhMZqP") 
-        await ctx.send(embed=embed3)
+        await lb_channel.send(embed=embed3)
         await asyncio.sleep(900)
-        
 
 class CustomHelpCommand(commands.HelpCommand):
     async def send_bot_help(self, mapping):
@@ -194,8 +195,7 @@ class CustomHelpCommand(commands.HelpCommand):
             description="<@1200756820403306586> is a Captcha solving game.\nAnswer the captcha correctly in alloted time or you lose!\n\n`;play` - starts a game\n\n`;skip` - skips the captcha\n\n`;coins` - shows your coin balance\n\n`;buy <quantity>` - buys the a specified amount of skips\n\n`;statistics` - shows player statistics\n\n`;leaderboard` - shows global leaderboards\n\n`;vote` - vote to receive rewards\n\nContact <@838472003031793684> for support or data deletion requests.",
             color=discord.Color.purple()
         )
-        lb_channel = bot.get_channel(1201185111815762001)
-        await lb_channel.send(embed=embed)
+        await ctx.send(embed=embed)
 
 bot.help_command = CustomHelpCommand()
 
