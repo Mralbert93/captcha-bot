@@ -108,85 +108,83 @@ async def on_ready():
         grandmaster: 500,
         overlord: 1000
     }
-
+    n = 1
     while True:
         games_count = await get_games_count()
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f"{games_count} Captchas"))
-        await asyncio.sleep(60)
-
-    await asyncio.sleep(15)
-    while True:
-        lb_channel = guild.get_channel(1201185111815762001)
+        if if n % 15 == 0:
+            lb_channel = guild.get_channel(1201185111815762001)
+            
+            most_games_query = [
+                {"$unwind": "$games"},
+                {"$group": {"_id": {"player_id": "$_id"}, "total_games": {"$sum": 1}}},
+                {"$sort": {"total_games": -1}},
+                {"$limit": 10}
+            ]
+            top_10_most_games = list(players.aggregate(most_games_query))
+            
+            most_games_string = ""
+            for i, result in enumerate(top_10_most_games, 1):
+                player_id = result["_id"]["player_id"]
+                total_games = result["total_games"]
+                most_games_string += f"{i}. <@{player_id}> - {total_games} games\n"
         
-        most_games_query = [
-            {"$unwind": "$games"},
-            {"$group": {"_id": {"player_id": "$_id"}, "total_games": {"$sum": 1}}},
-            {"$sort": {"total_games": -1}},
-            {"$limit": 10}
-        ]
-        top_10_most_games = list(players.aggregate(most_games_query))
-    
-        most_games_string = ""
-        for i, result in enumerate(top_10_most_games, 1):
-            player_id = result["_id"]["player_id"]
-            total_games = result["total_games"]
-            most_games_string += f"{i}. <@{player_id}> - {total_games} games\n"
-    
-        most_sum_query = [
-            {"$unwind": "$games"},
-            {"$group": {"_id": {"player_id": "$_id"}, "total_score": {"$sum": "$games.score"}}},
-            {"$sort": {"total_score": -1}},
-            {"$limit": 10}
-        ]
-        top_10_sum_scores = list(players.aggregate(most_sum_query))
-    
-        most_sum_scores_string = ""
-        for i, result in enumerate(top_10_sum_scores, 1):
-            player_id = result["_id"]["player_id"]
-            total_score = result["total_score"]
-            most_sum_scores_string += f"{i}. <@{player_id}> - {total_score}\n"
-    
-        high_score_query = [
-            {"$unwind": "$games"},
-            {"$group": {"_id": {"player_id": "$_id"}, "high_score": {"$max": "$games.score"}}},
-            {"$sort": {"high_score": -1}},
-            {"$limit": 10}
-        ]
-        top_10_high_scores = list(players.aggregate(high_score_query))
-    
-        top_high_score_string = ""
-        for i, result in enumerate(top_10_high_scores, 1):
-            player_id = result["_id"]["player_id"]
-            high_score = result["high_score"]
-            top_high_score_string += f"{i}. <@{player_id}> - {high_score}\n"
-    
-        embed = discord.Embed(
-            title='Leaderboard - High Score',
-            description=f"{top_high_score_string}",
-            color=discord.Color.purple()
-        )
-        embed.set_thumbnail(url=bot.user.avatar.url)
-        embed.set_footer(text="Leaderboards updated hourly here: https://discord.gg/gkpxVhMZqP") 
-        await lb_channel.send(embed=embed)
-    
-        embed2 = discord.Embed(
-            title='Leaderboard - Total Score',
-            description=f"{most_sum_scores_string}",
-            color=discord.Color.purple()
-        )
-        embed2.set_thumbnail(url=bot.user.avatar.url)
-        embed2.set_footer(text="Leaderboards updated hourly here: https://discord.gg/gkpxVhMZqP") 
-        await lb_channel.send(embed=embed2)
-    
-        embed3 = discord.Embed(
-            title='Leaderboard - Games Played',
-            description=f"{most_games_string}",
-            color=discord.Color.purple()
-        )
-        embed3.set_thumbnail(url=bot.user.avatar.url)
-        embed3.set_footer(text="Leaderboards updated hourly here: https://discord.gg/gkpxVhMZqP") 
-        await lb_channel.send(embed=embed3)
-        await asyncio.sleep(900)
+            most_sum_query = [
+                {"$unwind": "$games"},
+                {"$group": {"_id": {"player_id": "$_id"}, "total_score": {"$sum": "$games.score"}}},
+                {"$sort": {"total_score": -1}},
+                {"$limit": 10}
+            ]
+            top_10_sum_scores = list(players.aggregate(most_sum_query))
+        
+            most_sum_scores_string = ""
+            for i, result in enumerate(top_10_sum_scores, 1):
+                player_id = result["_id"]["player_id"]
+                total_score = result["total_score"]
+                most_sum_scores_string += f"{i}. <@{player_id}> - {total_score}\n"
+        
+            high_score_query = [
+                {"$unwind": "$games"},
+                {"$group": {"_id": {"player_id": "$_id"}, "high_score": {"$max": "$games.score"}}},
+                {"$sort": {"high_score": -1}},
+                {"$limit": 10}
+            ]
+            top_10_high_scores = list(players.aggregate(high_score_query))
+        
+            top_high_score_string = ""
+            for i, result in enumerate(top_10_high_scores, 1):
+                player_id = result["_id"]["player_id"]
+                high_score = result["high_score"]
+                top_high_score_string += f"{i}. <@{player_id}> - {high_score}\n"
+        
+            embed = discord.Embed(
+                title='Leaderboard - High Score',
+                description=f"{top_high_score_string}",
+                color=discord.Color.purple()
+            )
+            embed.set_thumbnail(url=bot.user.avatar.url)
+            embed.set_footer(text="Leaderboards updated hourly here: https://discord.gg/gkpxVhMZqP") 
+            await lb_channel.send(embed=embed)
+        
+            embed2 = discord.Embed(
+                title='Leaderboard - Total Score',
+                description=f"{most_sum_scores_string}",
+                color=discord.Color.purple()
+            )
+            embed2.set_thumbnail(url=bot.user.avatar.url)
+            embed2.set_footer(text="Leaderboards updated hourly here: https://discord.gg/gkpxVhMZqP") 
+            await lb_channel.send(embed=embed2)
+        
+            embed3 = discord.Embed(
+                title='Leaderboard - Games Played',
+                description=f"{most_games_string}",
+                color=discord.Color.purple()
+            )
+            embed3.set_thumbnail(url=bot.user.avatar.url)
+            embed3.set_footer(text="Leaderboards updated hourly here: https://discord.gg/gkpxVhMZqP") 
+            await lb_channel.send(embed=embed3)
+        n += 1
+        await asyncio.sleep(60)
 
 class CustomHelpCommand(commands.HelpCommand):
     async def send_bot_help(self, mapping):
