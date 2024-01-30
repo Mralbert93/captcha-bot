@@ -40,13 +40,14 @@ async def save_game(player_id, guild_id, score):
     }
 
     multiplier = await check_for_boost(player_id)
+    coins = score*10*multiplier
 
     player = players.find_one({'_id': player_id})
     if player is None:
-         players.insert_one({'_id': player_id, 'games': [game], 'coins': score*10*multiplier})
+         players.insert_one({'_id': player_id, 'games': [game], 'coins': coins})
     else:
-        players.update_one({'_id': player_id}, {'$push': {'games': game}, "$inc": {"coins": score*10*multiplier}}, upsert=True)
-    return
+        players.update_one({'_id': player_id}, {'$push': {'games': game}, "$inc": {"coins": coins}}, upsert=True)
+    return multiplier, coins
 
 async def get_games_count():
     games_query = [
@@ -92,7 +93,6 @@ async def check_for_boost(player_id):
     if player is None:
         return 1
 
-    print(player)
     if player.premium_since is None:
         return 1
     else:
@@ -409,10 +409,10 @@ async def play(ctx):
 
     await asyncio.sleep(10)
     if captchas.get(player_id, {}).get('captcha_string') == random_string:
+        multiplier, coins = await save_game(player_id, ctx.guild.id, 0)
         embed.title = "Time is up!"
-        embed.description = f"You have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[player_id]['score']}\n\nPlay again with `;p` or `;play`\n\n<@{player_id}>"
+        embed.description = f"You have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[player_id]['score']}\n\nYou earned **{coins} :coin: coins** ({multiplier}x multiplier).\n\nPlay again with `;p` or `;play`\n\n<@{player_id}>"
         await challenge.edit(embed=embed)
-        await save_game(player_id, ctx.guild.id, 0)
         delete_captcha(random_string)
         del captchas[player_id]
     else:
@@ -493,11 +493,11 @@ async def on_message(message):
                 score = captchas[player_id]['score']
                 await asyncio.sleep(10)
                 if captchas.get(player_id, {}).get('captcha_string') == random_string:
+                    multiplier, coins = await save_game(player_id, message.guild.id, captchas[player_id]['score'])
                     embed.title = "Time is up!"
-                    embed.description = f"You have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[player_id]['score']}\n{progress}\n\n<@{player_id}>"
+                    embed.description = f"You have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[player_id]['score']}\n{progress}\n\nYou earned **{coins} :coin: coins** ({multiplier}x multiplier)\n\n<@{player_id}>"
                     embed.set_footer(text="Play again with ;p or ;play")
                     await challenge.edit(embed=embed)
-                    await save_game(player_id, message.guild.id, captchas[player_id]['score'])
                     delete_captcha(random_string)
                     if message.guild.id == 1201163257461866596:
                         await check_roles(player_id, captchas[player_id]['score'], message.channel)
@@ -507,14 +507,14 @@ async def on_message(message):
                 progress = "🔥" * (int(score/5)+1)
                 if score == 0:
                     progress = ""
+                await save_game(player_id, message.guild.id, captchas[player_id]['score'])
                 embed = discord.Embed(
                     title="Wrong Answer",
-                    description=f"You have lost.\nThe correct answer was **{answer}**.\n\n**Final Score:** {captchas[player_id]['score']}\n{progress}\n\n<@{player_id}>",
+                    description=f"You have lost.\nThe correct answer was **{answer}**.\n\n**Final Score:** {captchas[player_id]['score']}\n{progress}\n\nYou earned **{coins} :coin: coins** ({multiplier}x multiplier).\n\n<@{player_id}>",
                     color=discord.Color.purple()
                 )
                 embed.set_footer(text="Play again with ;p or ;play")
                 await message.channel.send(embed=embed)
-                await save_game(player_id, message.guild.id, captchas[player_id]['score'])
                 delete_captcha(answer)
                 if message.guild.id == 1201163257461866596:
                     await check_roles(player_id, captchas[player_id]['score'], message.channel)
@@ -575,11 +575,11 @@ async def skip(ctx):
         score = captchas[player_id]['score']
         await asyncio.sleep(10)
         if captchas.get(player_id, {}).get('captcha_string') == random_string:
+            multiplier, coins = await save_game(player_id, ctx.message.guild.id, captchas[player_id]['score'])
             embed.title = "Time is up!"
-            embed.description = f"You have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[player_id]['score']}\n{progress}\n\n<@{player_id}>"
+            embed.description = f"You have lost.\nThe correct answer was **{random_string}**.\n\n**Final Score:** {captchas[player_id]['score']}\n{progress}\n\nYou earned **{coins} :coin: coins** ({multiplier}x multiplier).\n\n<@{player_id}>"
             embed.set_footer(text="Play again with ;p or ;play")
             await challenge.edit(embed=embed)
-            await save_game(player_id, ctx.message.guild.id, captchas[player_id]['score'])
             delete_captcha(random_string)
             if ctx.message.guild.id == 1201163257461866596:
                 new_roles = await check_roles(player_id, captchas[player_id]['score'], ctx.message.channel)
