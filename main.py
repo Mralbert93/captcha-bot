@@ -83,7 +83,7 @@ async def check_roles(player_id, score, channel):
             await channel.send(embed=embed)
     return new_roles
 
-async def update_leaderboards():
+async def update_leaderboards(guild):
     lb_channel = guild.get_channel(1201185111815762001)
             
     most_games_query = [
@@ -182,13 +182,13 @@ async def on_ready():
         overlord: 1000
     }
 
-    await update_leaderboards()
+    await update_leaderboards(guild)
     n = 1
     while True:
         games_count = await get_games_count()
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f"{games_count} Captchas"))
         if n % 15 == 0:
-            await update_leaderboards()
+            await update_leaderboards(guild)
         n += 1
         await asyncio.sleep(60)
 
