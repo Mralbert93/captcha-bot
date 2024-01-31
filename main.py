@@ -179,8 +179,7 @@ async def send_message_to_guild_owners():
         try:
             owner = await bot.fetch_user(guild.owner_id)
 
-            # Send a direct message to the owner
-            await owner.send("Hello! My name is <@838472003031793684>, creator of <@1200756820403306586>. I am reaching out to let you know we have identified and resolved a bug that was causing first time players records to fail to save. The bot has been thoroughly tested and should now be working again. If you encounter any other issues, please feel free to report them here:\n\mhttps://discord.gg/Mz8NwHDa")
+            await owner.send("Hello! My name is <@838472003031793684>, creator of <@1200756820403306586>. I am reaching out to let you know we have identified and resolved a bug that was causing first time players records to fail to save. The bot has been thoroughly tested and should now be working again. If you encounter any other issues, please feel free to report them here:\nhttps://discord.gg/Mz8NwHDa")
 
             print(f"Message sent to the owner of {guild.name}")
         except discord.HTTPException as e:
@@ -195,7 +194,7 @@ async def on_ready():
     
     guild = bot.get_guild(1201163257461866596)
 
-    await send_message_to_guild_owners()
+    #await send_message_to_guild_owners()
     
     novice = discord.utils.get(guild.roles, id=1201493503096651816)
     apprentice = discord.utils.get(guild.roles, id=1201493685775368272)
