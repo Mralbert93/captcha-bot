@@ -88,8 +88,11 @@ async def check_roles(player_id, score, channel):
     return new_roles
 
 async def check_for_boost(player_id):
-    player = await guild.fetch_member(player_id)
-
+    try:
+        player = await guild.fetch_member(player_id)
+    except Exception as e:
+        return 1
+        
     if player is None:
         return 1
 
